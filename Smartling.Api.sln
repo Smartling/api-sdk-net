@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartling.Api", "Smartling.API\Smartling.Api.csproj", "{A52052C2-B074-4C02-AF5A-5AA4DAEEFA67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartling.ApiSample", "Smartling.Sample\Smartling.ApiSample.csproj", "{2D141CF8-A60C-4C25-A9C8-D4EB86112FBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartling.ApiTests", "Smartling.APITests\Smartling.ApiTests.csproj", "{C0C3C240-A266-48A6-BBC1-E6106BEFB520}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A52052C2-B074-4C02-AF5A-5AA4DAEEFA67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A52052C2-B074-4C02-AF5A-5AA4DAEEFA67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A52052C2-B074-4C02-AF5A-5AA4DAEEFA67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A52052C2-B074-4C02-AF5A-5AA4DAEEFA67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D141CF8-A60C-4C25-A9C8-D4EB86112FBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D141CF8-A60C-4C25-A9C8-D4EB86112FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D141CF8-A60C-4C25-A9C8-D4EB86112FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D141CF8-A60C-4C25-A9C8-D4EB86112FBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0C3C240-A266-48A6-BBC1-E6106BEFB520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0C3C240-A266-48A6-BBC1-E6106BEFB520}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0C3C240-A266-48A6-BBC1-E6106BEFB520}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0C3C240-A266-48A6-BBC1-E6106BEFB520}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

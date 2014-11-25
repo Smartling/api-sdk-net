@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Smartling.Api</id>
+        <version>1.0.0</version>
+        <title>Smartling Translation API</title>
+        <authors>Smartling</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Smartling Translation API</description>
+        <dependencies>
+            <group targetFramework=".NETFramework4.0">
+                <dependency id="Newtonsoft.Json" version="3.5.8" />
+            </group>
+            <group targetFramework=".NETFramework3.5">
+                <dependency id="Newtonsoft.Json" version="3.5.8" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="bin\Release\Smartling.Api.dll" target="lib\Smartling.Api.dll" />
+        <file src="bin\Release\Smartling.Api.pdb" target="lib\Smartling.Api.pdb" />
+    </files>
+</package>
