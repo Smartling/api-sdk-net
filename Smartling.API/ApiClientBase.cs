@@ -17,6 +17,17 @@ namespace Smartling.Api
     private const string JsonAccept = "application/json";
     private const string FileNameParameterName = "file";
 
+    private ClientUid apiClientUid;
+    public ClientUid ApiClientUid
+    {
+      get
+      {
+        return apiClientUid ?? ClientUid.DefaultUid();
+      }
+
+      set { apiClientUid = value; }
+    }
+
     public ApiClientBase()
     {
       ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;

@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Smartling.Api;
 using Smartling.Api.Authentication;
 using Smartling.Api.File;
 
@@ -82,8 +77,7 @@ namespace Smartling.ApiTests
            ""lastModified"": ""2000-01-01T01:01:01Z""                
         }        
       }";
-
-
+    
     private static OAuthAuthenticationStrategy GetAuth()
     {
       var authClient = new Mock<AuthApiClient>("test", "test");
@@ -110,6 +104,9 @@ namespace Smartling.ApiTests
       Assert.AreEqual(fileStatus.wordCount, 126);
       Assert.AreEqual(fileStatus.stringCount, 4);
       client.Verify(t => t.GetResponse(It.IsAny<WebRequest>()), Times.Once);
+
+      var clientUid = "{\"client\":\"smartling-api-sdk-net\",\"version\":\"2.0.1.0\"}";
+      client.Verify(foo => foo.PrepareFilePostRequest(It.IsAny<string>(), It.IsAny<string>(), It.Is<NameValueCollection>(x => x["smartling.client_lib_id"] == clientUid), It.IsAny<string>()), Times.Once);
     }
 
     [TestMethod]

@@ -28,6 +28,7 @@ namespace Smartling.Api.File
     private const string RetrievalTypeParameterName = "retrievalType";
     private const string CallbackUrlParameterName = "callbackUrl";
     private const string LocalesToApproveParameterName = "localeIdsToAuthorize[]";
+    private const string CliendUidParameterName = "smartling.client_lib_id";
 
     private readonly string projectId;
     private readonly string callbackUrl;
@@ -56,6 +57,7 @@ namespace Smartling.Api.File
       var formData = new NameValueCollection();
       formData.Add(FileUriParameterName, fileUri);
       formData.Add(FileTypeParameterName, fileType);
+      formData.Add(CliendUidParameterName, JsonConvert.SerializeObject(this.ApiClientUid));
 
       if (!string.IsNullOrEmpty(this.callbackUrl))
       {
