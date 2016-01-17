@@ -37,5 +37,12 @@ namespace Smartling.Api.Authentication
       LastSuccessfullUpdate = DateTime.UtcNow;
       return LastResponse.data.accessToken;
     }
+
+    public string GetToken(bool forceAuthentication)
+    {
+      LastResponse = client.Authenticate();
+      LastSuccessfullUpdate = DateTime.UtcNow;
+      return LastResponse.data.accessToken;
+    }
   }
 }

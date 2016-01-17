@@ -71,7 +71,7 @@ namespace Smartling.ApiTests
       var client = new Mock<AuthApiClient>("test", "test");
       client.CallBase = true;
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(ValidAuthRespone);
-      client.Setup(foo => foo.CreatePostRequest(It.IsAny<string>(), It.IsAny<Object>())).Returns((WebRequest)null);
+      client.Setup(foo => foo.PrepareJsonPostRequest(It.IsAny<string>(), It.IsAny<Object>())).Returns((WebRequest)null);
       var strategy = new OAuthAuthenticationStrategy(client.Object);
 
       // Act
@@ -91,7 +91,7 @@ namespace Smartling.ApiTests
       var client = new Mock<AuthApiClient>("test", "test");
       client.CallBase = true;
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(ExpiredAuthRespone);
-      client.Setup(foo => foo.CreatePostRequest(It.IsAny<string>(), It.IsAny<Object>())).Returns((WebRequest)null);
+      client.Setup(foo => foo.PrepareJsonPostRequest(It.IsAny<string>(), It.IsAny<Object>())).Returns((WebRequest)null);
       var strategy = new OAuthAuthenticationStrategy(client.Object);
 
       // Act
@@ -111,7 +111,7 @@ namespace Smartling.ApiTests
       var client = new Mock<AuthApiClient>("test", "test");
       client.CallBase = true;
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(ExpiredRefreshRespone);
-      client.Setup(foo => foo.CreatePostRequest(It.IsAny<string>(), It.IsAny<Object>())).Returns((WebRequest)null);
+      client.Setup(foo => foo.PrepareJsonPostRequest(It.IsAny<string>(), It.IsAny<Object>())).Returns((WebRequest)null);
       var strategy = new OAuthAuthenticationStrategy(client.Object);
 
       // Act

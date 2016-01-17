@@ -18,7 +18,7 @@ namespace Smartling.Api.Authentication
     public virtual AuthResponse Authenticate()
     {
       var command = new AuthCommand() { userIdentifier = this.userIdentifier, userSecret = this.userSecret };
-      var request = CreatePostRequest(DEFAULT_API_GATEWAY_URL + AUTH_API_V2_AUTHENTICATE, command);
+      var request = PrepareJsonPostRequest(DEFAULT_API_GATEWAY_URL + AUTH_API_V2_AUTHENTICATE, command);
       var jsonResponse = GetResponse(request);
       var authResponse = JsonConvert.DeserializeObject<AuthResponseWrapper>(jsonResponse);
 
@@ -28,7 +28,7 @@ namespace Smartling.Api.Authentication
     public virtual AuthResponse Refresh(string refreshToken)
     {
       var command = new RefreshCommand() { refreshToken = refreshToken };
-      var request = CreatePostRequest(DEFAULT_API_GATEWAY_URL + AUTH_API_V2_REFRESH, command);
+      var request = PrepareJsonPostRequest(DEFAULT_API_GATEWAY_URL + AUTH_API_V2_REFRESH, command);
       var jsonResponse = GetResponse(request);
       var refreshResponse = JsonConvert.DeserializeObject<AuthResponseWrapper>(jsonResponse);
 

@@ -1,21 +1,23 @@
-﻿namespace Smartling.Api.Model
+﻿using System;
+
+namespace Smartling.Api.Model
 {
   public class FileStatus
   {
     public string fileUri;
 
-    public int stringCount;
+    public int totalStringCount;
 
-    public int wordCount;
-
-    public int approvedStringCount;
-
-    public int completedStringCount;
-
-    public string lastUploaded;
+    public int totalWordCount;
 
     public string fileType;
 
-    public string callbackUrl;
+    public DateTime lastUploaded;
+
+    public int totalCount;
+
+    public FileStatusDetail[] items;
+
+    public string hasInstructions;
   }
 }

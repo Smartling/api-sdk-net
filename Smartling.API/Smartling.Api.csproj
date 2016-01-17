@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\ApiClientBase.cs" />
+    <Compile Include="ApiClientBase.cs" />
     <Compile Include="Authentication\IAuthenticationStrategy.cs" />
     <Compile Include="Authentication\OAuthAuthenticationStrategy.cs" />
     <Compile Include="Authentication\RefreshCommand.cs" />
@@ -53,17 +53,22 @@
     <Compile Include="Authentication\AuthResponse.cs" />
     <Compile Include="Authentication\AuthResponseWrapper.cs" />
     <Compile Include="Authentication\AuthResponseData.cs" />
+    <Compile Include="Exceptions\AuthorizationException.cs" />
     <Compile Include="Extensions\FileStatusExtensions.cs" />
-    <Compile Include="ITranslator.cs" />
+    <Compile Include="File\FileApiClient.cs" />
     <Compile Include="Model\ErrorItem.cs" />
     <Compile Include="Model\Error.cs" />
+    <Compile Include="Model\FileUploadResult.cs" />
+    <Compile Include="Model\FileStatusItem.cs" />
+    <Compile Include="Model\FileStatus.cs" />
+    <Compile Include="Model\LastModified.cs" />
+    <Compile Include="Model\LastModifiedDetail.cs" />
+    <Compile Include="Model\LastModifiedItem.cs" />
     <Compile Include="Model\Response.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\FileList.cs" />
-    <Compile Include="Model\FileStatus.cs" />
-    <Compile Include="Model\UploadData.cs" />
+    <Compile Include="Model\FileStatusDetail.cs" />
     <Compile Include="Authentication\AuthApiClient.cs" />
-    <Compile Include="Translator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

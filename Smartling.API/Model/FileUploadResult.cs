@@ -1,11 +1,11 @@
 ﻿namespace Smartling.Api.Model
 {
-  class UploadData
+  public class FileUploadResult
   {
+    public bool overWritten;
+
     public int stringCount;
 
     public int wordCount;
-
-    public bool overWritten;
   }
 }

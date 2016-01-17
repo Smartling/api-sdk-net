@@ -58,9 +58,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AuthApiClientTests.cs" />
+    <Compile Include="FileApiClientTests.cs" />
     <Compile Include="OAuthAuthenticationStrategyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TranslatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Smartling.API\Smartling.Api.csproj">

@@ -4,8 +4,8 @@
 
   public class FileList
   {
-    public int fileCount;
+    public int totalCount;
 
-    public List<FileStatus> fileList;
+    public List<FileStatus> items;
   }
 }

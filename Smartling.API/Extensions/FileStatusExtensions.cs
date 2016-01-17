@@ -7,12 +7,12 @@ namespace Smartling.Api.Extensions
   {
     private const int TranslationComplete = 100;
 
-    public static int GetPercentComplete(this FileStatus status)
+    public static int GetPercentComplete(this FileStatusDetail status)
     {
-      return status.stringCount == 0
+      return status.totalStringCount == 0
         ? TranslationComplete
         : Convert.ToInt32(
-          ((float) status.completedStringCount)/status.stringCount*TranslationComplete);
+          ((float) status.completedStringCount)/status.totalStringCount * TranslationComplete);
     }
   }
 }
