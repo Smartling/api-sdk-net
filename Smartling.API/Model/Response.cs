@@ -5,5 +5,6 @@
     public string code;
 
     public string[] messages;
+    public ErrorItem[] errors;
   }
 }
