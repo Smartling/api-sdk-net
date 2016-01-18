@@ -18,6 +18,7 @@ namespace Smartling.ApiSample
       var authApiClient = new AuthApiClient(userIdentifier, userSecret);
       var auth = new OAuthAuthenticationStrategy(authApiClient);
       var fileApiClient = new FileApiClient(auth, projectId, string.Empty);
+      fileApiClient.ApiGatewayUrl = "https://api.smartling.com";
       string fileUri = "ApiSample_" + Guid.NewGuid();
 
       Upload(fileApiClient, fileUri, "xml");

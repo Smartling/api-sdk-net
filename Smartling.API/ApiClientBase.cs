@@ -16,6 +16,7 @@ namespace Smartling.Api
     private const string JsonContentType = "application/json; charset=UTF-8";
     private const string JsonAccept = "application/json";
     private const string FileNameParameterName = "file";
+    public string ApiGatewayUrl { get; set; }
 
     private ClientUid apiClientUid;
     public ClientUid ApiClientUid
@@ -235,7 +236,12 @@ namespace Smartling.Api
 
     protected StringBuilder GetRequestStringBuilder(string methodUrl)
     {
-      return new StringBuilder().AppendFormat(DEFAULT_API_GATEWAY_URL + methodUrl);
+      if (string.IsNullOrEmpty(ApiGatewayUrl))
+      {
+        return new StringBuilder().AppendFormat(DEFAULT_API_GATEWAY_URL + methodUrl);
+      }
+
+      return new StringBuilder().AppendFormat(ApiGatewayUrl + methodUrl);
     }
   }
 }
