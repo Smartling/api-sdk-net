@@ -57,6 +57,7 @@ namespace Smartling.ApiSample
     {
       Console.WriteLine("Download...");
       var downloadedFile = fileClient.GetFile(fileUri, "ru-RU", "pseudo");
+      var fileStream = fileClient.GetFileStream(fileUri, "ru-RU");
       Console.WriteLine(downloadedFile);
     }
 

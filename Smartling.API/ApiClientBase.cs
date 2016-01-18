@@ -180,6 +180,59 @@ namespace Smartling.Api
       return request;
     }
 
+    public Stream GetResponseStream(WebRequest request)
+    {
+      try
+      {
+        using (var response = request.GetResponse())
+        using (var stream = response.GetResponseStream())
+        {
+          var data = ReadFully(stream);
+          return new MemoryStream(data);
+        }
+      }
+      catch (WebException e)
+      {
+        if (e.Response == null)
+        {
+          throw;
+        }
+
+        using (WebResponse response = e.Response)
+        {
+          using (Stream data = response.GetResponseStream())
+          using (var reader = new StreamReader(data))
+          {
+            string text = reader.ReadToEnd();
+            var error = JsonConvert.DeserializeObject<Error>(text);
+            string messages = error.response.messages.Aggregate(
+              string.Empty,
+              (current, message) => current + Environment.NewLine + message);
+
+            throw new Exception(error.response.code + ": " + messages, e);
+          }
+        }
+      }
+    }
+
+    public static byte[] ReadFully(Stream stream)
+    {
+      var buffer = new byte[32768];
+      using (var ms = new MemoryStream())
+      {
+        while (true)
+        {
+          int read = stream.Read(buffer, 0, buffer.Length);
+          if (read <= 0)
+          {
+            return ms.ToArray();
+          }
+
+          ms.Write(buffer, 0, read);
+        }
+      }
+    }
+
     protected StringBuilder GetRequestStringBuilder(string methodUrl)
     {
       return new StringBuilder().AppendFormat(DEFAULT_API_GATEWAY_URL + methodUrl);

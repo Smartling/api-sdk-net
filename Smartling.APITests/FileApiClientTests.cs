@@ -94,6 +94,7 @@ namespace Smartling.ApiTests
       // Arrange
       var auth = GetAuth();
       var client = new Mock<FileApiClient>(auth, "test", "test");
+      client.CallBase = true;
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(UploadFileResponseString);
       client.Setup(foo => foo.PrepareFilePostRequest(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<NameValueCollection>(), It.IsAny<string>())).Returns((WebRequest)null);
 
@@ -115,6 +116,7 @@ namespace Smartling.ApiTests
       // Arrange
       var auth = GetAuth();
       var client = new Mock<FileApiClient>(auth, "test", "test");
+      client.CallBase = true;
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(ValidStatusResponse);
       client.Setup(foo => foo.PrepareGetRequest(It.IsAny<string>(), It.IsAny<string>())).Returns((WebRequest)null);
 
@@ -132,6 +134,7 @@ namespace Smartling.ApiTests
       // Arrange
       var auth = GetAuth();
       var client = new Mock<FileApiClient>(auth, "test", "test");
+      client.CallBase = true;
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(ValidStatusResponse);
       client.Setup(foo => foo.PrepareGetRequest(It.IsAny<string>(), It.IsAny<string>())).Returns((WebRequest)null);
 
@@ -149,7 +152,7 @@ namespace Smartling.ApiTests
       // Arrange
       var auth = GetAuth();
       var client = new Mock<FileApiClient>(auth, "test", "test");
-      //client.Setup(x => x.GetFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).CallBase();
+      client.CallBase = true;
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(GetFileResponse);
       client.Setup(foo => foo.PrepareGetRequest(It.IsAny<string>(), It.IsAny<string>())).Returns((WebRequest)null);
 
@@ -168,6 +171,7 @@ namespace Smartling.ApiTests
       // Arrange
       var auth = GetAuth();
       var client = new Mock<FileApiClient>(auth, "test", "test");
+      client.CallBase = true;
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(LastModifiedResponse);
       client.Setup(foo => foo.PrepareGetRequest(It.IsAny<string>(), It.IsAny<string>())).Returns((WebRequest)null);
 
@@ -185,6 +189,7 @@ namespace Smartling.ApiTests
       // Arrange
       var auth = GetAuth();
       var client = new Mock<FileApiClient>(auth, "test", "test");
+      client.CallBase = true;
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(LastModifiedDetailResponse);
       client.Setup(foo => foo.PrepareGetRequest(It.IsAny<string>(), It.IsAny<string>())).Returns((WebRequest)null);
 
