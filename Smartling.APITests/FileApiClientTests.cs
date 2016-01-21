@@ -106,7 +106,7 @@ namespace Smartling.ApiTests
       Assert.AreEqual(fileStatus.stringCount, 4);
       client.Verify(t => t.GetResponse(It.IsAny<WebRequest>()), Times.Once);
 
-      var clientUid = "{\"client\":\"smartling-api-sdk-net\",\"version\":\"2.0.2.0\"}";
+      var clientUid = "{\"client\":\"smartling-api-sdk-net\",\"version\":\"2.0.3.0\"}";
       client.Verify(foo => foo.PrepareFilePostRequest(It.IsAny<string>(), It.IsAny<string>(), It.Is<NameValueCollection>(x => x["smartling.client_lib_id"] == clientUid), It.IsAny<string>()), Times.Once);
     }
 

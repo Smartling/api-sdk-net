@@ -16,7 +16,7 @@ namespace Smartling.Api.Model
 
     public int totalCount;
 
-    public FileStatusDetail[] items;
+    public FileStatusItem[] items;
 
     public string hasInstructions;
   }
