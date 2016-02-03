@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Net;
+using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Smartling.Api.Authentication;
@@ -106,7 +107,8 @@ namespace Smartling.ApiTests
       Assert.AreEqual(fileStatus.stringCount, 4);
       client.Verify(t => t.GetResponse(It.IsAny<WebRequest>()), Times.Once);
 
-      var clientUid = "{\"client\":\"smartling-api-sdk-net\",\"version\":\"2.0.3.0\"}";
+      var version = Assembly.GetAssembly(typeof (FileApiClient)).GetName().Version.ToString();
+      var clientUid = "{\"client\":\"smartling-api-sdk-net\",\"version\":\"" + version + "\"}";
       client.Verify(foo => foo.PrepareFilePostRequest(It.IsAny<string>(), It.IsAny<string>(), It.Is<NameValueCollection>(x => x["smartling.client_lib_id"] == clientUid), It.IsAny<string>()), Times.Once);
     }
 
@@ -126,6 +128,22 @@ namespace Smartling.ApiTests
       // Assert
       Assert.AreEqual(fileStatus.totalStringCount, 10);
       Assert.AreEqual(fileStatus.totalWordCount, 100);
+    }
+
+    [TestMethod]
+    public void ShouldSetUserAgent()
+    {
+      // Arrange
+      var auth = GetAuth();
+      var client = new FileApiClient(auth, "test", "test");
+
+      // Act
+      var request = (HttpWebRequest)client.PrepareGetRequest("http://smartling.com", "test");
+
+      // Assert
+      var version = Assembly.GetAssembly(typeof (FileApiClient)).GetName().Version.ToString();
+      var userAgent = string.Format("smartling-api-sdk-net/{0}", version);
+      Assert.AreEqual(userAgent, request.UserAgent);
     }
 
     [TestMethod]

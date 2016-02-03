@@ -15,5 +15,10 @@ namespace Smartling.Api.Model
         version = Assembly.GetExecutingAssembly().GetName().Version.ToString()
       };
     }
+
+    public string ToUserAgent()
+    {
+      return string.Format("{0}/{1}", client, version);
+    }
   }
 }

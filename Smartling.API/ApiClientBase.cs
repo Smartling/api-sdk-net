@@ -19,6 +19,8 @@ namespace Smartling.Api
     public string ApiGatewayUrl { get; set; }
 
     private ClientUid apiClientUid;
+    private string AuthorizationHeaderName = "Authorization";
+
     public ClientUid ApiClientUid
     {
       get
@@ -84,6 +86,7 @@ namespace Smartling.Api
       request.ContentType = JsonContentType;
       request.Accept = JsonAccept;
       request.ContentLength = postBytes.Length;
+      request.UserAgent = ApiClientUid.ToUserAgent();
 
       Stream requestStream = request.GetRequestStream();
       requestStream.Write(postBytes, 0, postBytes.Length);
@@ -95,9 +98,10 @@ namespace Smartling.Api
     {
       var boundary = string.Format("----------{0:N}", Guid.NewGuid());
 
-      var request = WebRequest.Create(uri);
+      var request = (HttpWebRequest)WebRequest.Create(uri);
       request.Method = WebRequestMethods.Http.Post;
       request.ContentType = string.Format("multipart/form-data; boundary={0}", boundary);
+      request.UserAgent = ApiClientUid.ToUserAgent();
 
       using (var memoryStream = new MemoryStream())
       {
@@ -136,7 +140,7 @@ namespace Smartling.Api
         memoryStream.Write(footerData, 0, footerData.Length);
 
         request.ContentLength = memoryStream.Length;
-        request.Headers.Add("Authorization", "Bearer " + token);
+        request.Headers.Add(AuthorizationHeaderName, "Bearer " + token);
 
         using (var stream = request.GetRequestStream())
         {
@@ -154,18 +158,21 @@ namespace Smartling.Api
 
     public virtual WebRequest PrepareGetRequest(string uri, string token)
     {
-      var request = WebRequest.Create(uri);
+      var request = (HttpWebRequest)WebRequest.Create(uri);
       request.Method = WebRequestMethods.Http.Get;
-      request.Headers.Add("Authorization", "Bearer " + token);
+      request.Headers.Add(AuthorizationHeaderName, "Bearer " + token);
+      request.UserAgent = ApiClientUid.ToUserAgent();
 
       return request;
     }
 
     public virtual WebRequest PreparePutRequest(string uri, string token)
     {
-      var request = WebRequest.Create(uri);
+      var request = (HttpWebRequest)WebRequest.Create(uri);
       request.Method = WebRequestMethods.Http.Put;
-      request.Headers.Add("Authorization", "Bearer " + token);
+      request.Headers.Add(AuthorizationHeaderName, "Bearer " + token);
+      request.UserAgent = ApiClientUid.ToUserAgent();
+
       var boundary = string.Format("----------{0:N}", Guid.NewGuid());
       request.ContentType = string.Format("multipart/form-data; boundary={0}", boundary);
       return request;
@@ -173,9 +180,10 @@ namespace Smartling.Api
 
     public virtual WebRequest PrepareDeleteRequest(string uri, string token)
     {
-      var request = WebRequest.Create(uri);
+      var request = (HttpWebRequest)WebRequest.Create(uri);
       request.Method = WebRequestMethods.Http.Post;
-      request.Headers.Add("Authorization", "Bearer " + token);
+      request.Headers.Add(AuthorizationHeaderName, "Bearer " + token);
+      request.UserAgent = ApiClientUid.ToUserAgent();
       var boundary = string.Format("----------{0:N}", Guid.NewGuid());
       request.ContentType = string.Format("multipart/form-data; boundary={0}", boundary);
       return request;
