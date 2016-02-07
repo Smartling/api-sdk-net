@@ -12,11 +12,25 @@ namespace Smartling.Api
 {
   public class ApiClientBase
   {
-    protected const string DEFAULT_API_GATEWAY_URL = "https://api.smartling.com";
+    private const string DEFAULT_API_GATEWAY_URL = "https://api.smartling.com";
     private const string JsonContentType = "application/json; charset=UTF-8";
     private const string JsonAccept = "application/json";
     private const string FileNameParameterName = "file";
-    public string ApiGatewayUrl { get; set; }
+    private string apiGatewayUrl;
+
+    public string ApiGatewayUrl
+    {
+      get
+      {
+        if (string.IsNullOrEmpty(apiGatewayUrl))
+        {
+          return DEFAULT_API_GATEWAY_URL;
+        }
+
+        return apiGatewayUrl;
+      }
+      set { apiGatewayUrl = value; }
+    }
 
     private ClientUid apiClientUid;
     private string AuthorizationHeaderName = "Authorization";
@@ -244,11 +258,6 @@ namespace Smartling.Api
 
     protected StringBuilder GetRequestStringBuilder(string methodUrl)
     {
-      if (string.IsNullOrEmpty(ApiGatewayUrl))
-      {
-        return new StringBuilder().AppendFormat(DEFAULT_API_GATEWAY_URL + methodUrl);
-      }
-
       return new StringBuilder().AppendFormat(ApiGatewayUrl + methodUrl);
     }
   }
