@@ -55,6 +55,7 @@
     <Compile Include="Authentication\AuthResponseData.cs" />
     <Compile Include="Exceptions\AuthorizationException.cs" />
     <Compile Include="Extensions\FileStatusExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="File\FileApiClient.cs" />
     <Compile Include="Model\ClientUid.cs" />
     <Compile Include="Model\ErrorItem.cs" />

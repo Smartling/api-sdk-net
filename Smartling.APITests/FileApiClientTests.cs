@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.IO;
 using System.Net;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -97,7 +98,7 @@ namespace Smartling.ApiTests
       var client = new Mock<FileApiClient>(auth, "test", "test");
       client.CallBase = true;
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(UploadFileResponseString);
-      client.Setup(foo => foo.PrepareFilePostRequest(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<NameValueCollection>(), It.IsAny<string>())).Returns((WebRequest)null);
+      client.Setup(foo => foo.PrepareFilePostRequest(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>(), It.IsAny<NameValueCollection>(), It.IsAny<string>())).Returns((WebRequest)null);
 
       // Act
       var fileStatus = client.Object.UploadFile(@"C:\Sample.xml", "Home_{110D559F-DEA5-42EA-9C1C-8A5DF7E70EF9}_en.xml", "xml", "ru-RU", true);
@@ -109,7 +110,7 @@ namespace Smartling.ApiTests
 
       var version = Assembly.GetAssembly(typeof (FileApiClient)).GetName().Version.ToString();
       var clientUid = "{\"client\":\"smartling-api-sdk-net\",\"version\":\"" + version + "\"}";
-      client.Verify(foo => foo.PrepareFilePostRequest(It.IsAny<string>(), It.IsAny<string>(), It.Is<NameValueCollection>(x => x["smartling.client_lib_id"] == clientUid), It.IsAny<string>()), Times.Once);
+      client.Verify(foo => foo.PrepareFilePostRequest(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>(), It.Is<NameValueCollection>(x => x["smartling.client_lib_id"] == clientUid), It.IsAny<string>()), Times.Once);
     }
 
     [TestMethod]

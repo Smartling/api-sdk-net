@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using Smartling.Api.Authentication;
 using Smartling.Api.File;
 
@@ -114,10 +115,19 @@ namespace Smartling.ApiSample
       Console.WriteLine(fileStatusDetail.totalWordCount);
     }
 
+    /// <summary>
+    /// It is also possible to upload file content directly: 
+    /// var fileContents = File.ReadAllText(@"C:\Sample.xml");
+    /// var status = client.UploadFileContents(fileContents, fileUri, fileType, "ru-RU,fr-FR", true);
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="fileUri"></param>
+    /// <param name="fileType"></param>
     private static void Upload(FileApiClient client, string fileUri, string fileType)
     {
       Console.WriteLine(string.Empty);
       Console.WriteLine("Uploading file...");
+
       var status = client.UploadFile(@"C:\Sample.xml", fileUri, fileType, "ru-RU,fr-FR", true);
       Console.WriteLine(status.stringCount);
     }

@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Smartling.Api.Authentication;
 using Smartling.Api.Exceptions;
+using Smartling.Api.Extensions;
 using Smartling.Api.Model;
 
 namespace Smartling.Api.File
@@ -54,6 +55,22 @@ namespace Smartling.Api.File
     /// <returns></returns>
     public virtual FileUploadResult UploadFile(string filePath, string fileUri, string fileType, string approvedLocales, bool authorizeContent)
     {
+      using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+      {
+        return UploadFileStream(fileStream, fileUri, fileType, approvedLocales, authorizeContent);
+      }
+    }
+
+    public virtual FileUploadResult UploadFileContents(string fileContents, string fileUri, string fileType, string approvedLocales, bool authorizeContent)
+    {
+      using (var fileStream = fileContents.ToStream())
+      {
+        return UploadFileStream(fileStream, fileUri, fileType, approvedLocales, authorizeContent);
+      }
+    }
+
+    public virtual FileUploadResult UploadFileStream(Stream fileStream, string fileUri, string fileType, string approvedLocales, bool authorizeContent)
+    {
       var uriBuilder = this.GetRequestStringBuilder(UploadUrl);
       var formData = new NameValueCollection();
       formData.Add(FileUriParameterName, fileUri);
@@ -70,20 +87,20 @@ namespace Smartling.Api.File
         formData.Add(LocalesToApproveParameterName, approvedLocales);
       }
 
-      return ExecuteUploadRequest(filePath, uriBuilder, formData);
+      return ExecuteUploadRequest(fileStream, fileUri, uriBuilder, formData);
     }
 
-    private FileUploadResult ExecuteUploadRequest(string filePath, StringBuilder uriBuilder, NameValueCollection formData)
+    private FileUploadResult ExecuteUploadRequest(Stream fileStream, string fileUri, StringBuilder uriBuilder, NameValueCollection formData)
     {
       try
       {
-        var request = PrepareFilePostRequest(uriBuilder.ToString(), filePath, formData, auth.GetToken());
+        var request = PrepareFilePostRequest(uriBuilder.ToString(), fileUri, fileStream, formData, auth.GetToken());
         var response = JObject.Parse(GetResponse(request));
         return JsonConvert.DeserializeObject<FileUploadResult>(response["response"]["data"].ToString());
       }
       catch (AuthorizationException)
       {
-        var request = PrepareFilePostRequest(uriBuilder.ToString(), filePath, formData, auth.GetToken(true));
+        var request = PrepareFilePostRequest(uriBuilder.ToString(), fileUri, fileStream, formData, auth.GetToken(true));
         var response = JObject.Parse(GetResponse(request));
         return JsonConvert.DeserializeObject<FileUploadResult>(response["response"]["data"].ToString());
       }

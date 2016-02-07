@@ -108,7 +108,7 @@ namespace Smartling.Api
       return request;
     }
 
-    public virtual WebRequest PrepareFilePostRequest(string uri, string filePath, NameValueCollection formData, string token)
+    public virtual WebRequest PrepareFilePostRequest(string uri, string fileName, Stream fileStream, NameValueCollection formData, string token)
     {
       var boundary = string.Format("----------{0:N}", Guid.NewGuid());
 
@@ -134,20 +134,17 @@ namespace Smartling.Api
         var header = new StringBuilder();
         header.AppendFormat("\r\n--{0}\r\n", boundary);
         header.AppendFormat("Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\n", FileNameParameterName,
-          filePath);
+          fileName);
         header.Append("Content-Type: application/octet-stream\r\n\r\n");
 
         var headerData = Encoding.UTF8.GetBytes(header.ToString());
         memoryStream.Write(headerData, 0, headerData.Length);
 
-        using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+        var fileBuffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = fileStream.Read(fileBuffer, 0, fileBuffer.Length)) != 0)
         {
-          var buffer = new byte[1024];
-          int bytesRead;
-          while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
-          {
-            memoryStream.Write(buffer, 0, bytesRead);
-          }
+          memoryStream.Write(fileBuffer, 0, bytesRead);
         }
 
         var footerData = Encoding.UTF8.GetBytes(string.Format("\r\n--{0}--\r\n", boundary));
