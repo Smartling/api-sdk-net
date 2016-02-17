@@ -27,7 +27,15 @@ namespace Smartling.Api.Authentication
 
       if (LastResponse != null && DateTime.UtcNow < LastSuccessfullUpdate.AddSeconds(LastResponse.data.refreshExpiresIn))
       {
-        LastResponse = client.Refresh(LastResponse.data.refreshToken);
+        try
+        {
+          LastResponse = client.Refresh(LastResponse.data.refreshToken);
+        }
+        catch
+        {
+          // If RefreshToken has failed for any reason - authenticate again
+          GetToken(true);
+        }
       }
       else
       {

@@ -105,6 +105,27 @@ namespace Smartling.ApiTests
     }
 
     [TestMethod]
+    public void GetTokenShouldAuthenticateIfRefreshFailed()
+    {
+      // Arrange
+      var client = new Mock<AuthApiClient>("test", "test");
+      client.CallBase = true;
+      client.Setup(foo => foo.GetResponse(It.Is<WebRequest>(x => !x.RequestUri.ToString().Contains("refresh")))).Returns(ExpiredAuthRespone);
+      client.Setup(foo => foo.GetResponse(It.Is<WebRequest>(x => x.RequestUri.ToString().Contains("refresh")))).Throws(new Exception());
+      client.Setup(foo => foo.PrepareJsonPostRequest(It.IsAny<string>(), It.IsAny<Object>())).Returns((string x, Object y) => (HttpWebRequest)WebRequest.Create(x));
+      var strategy = new OAuthAuthenticationStrategy(client.Object);
+
+      // Act
+      var accessToken = strategy.GetToken();
+      accessToken = strategy.GetToken();
+
+      // Assert
+      client.Verify(x => x.Authenticate(), Times.Exactly(2));
+      client.Verify(x => x.Refresh(It.IsAny<string>()), Times.Once);
+      Assert.AreEqual("{access token}", accessToken);
+    }
+
+    [TestMethod]
     public void GetTokenShouldAuthWhenRefreshTokenExpired()
     {
       // Arrange
