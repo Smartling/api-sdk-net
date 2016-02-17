@@ -34,7 +34,7 @@ namespace Smartling.Api.Authentication
         catch
         {
           // If RefreshToken has failed for any reason - authenticate again
-          GetToken(true);
+          return GetToken(true);
         }
       }
       else
