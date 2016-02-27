@@ -1,7 +1,7 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using Smartling.Api.Authentication;
 using Smartling.Api.File;
+using Smartling.Api.Project;
 
 namespace Smartling.ApiSample
 {
@@ -19,9 +19,11 @@ namespace Smartling.ApiSample
       var authApiClient = new AuthApiClient(userIdentifier, userSecret);
       var auth = new OAuthAuthenticationStrategy(authApiClient);
       var fileApiClient = new FileApiClient(auth, projectId, string.Empty);
+      var projectApiClient = new ProjectApiClient(auth, projectId);
       fileApiClient.ApiGatewayUrl = "https://api.smartling.com";
       string fileUri = "ApiSample_" + Guid.NewGuid();
 
+      GetProjectData(projectApiClient);
       Upload(fileApiClient, fileUri, "xml");
       List(fileApiClient);
       Status(fileApiClient, fileUri, "ru-RU");
@@ -32,6 +34,17 @@ namespace Smartling.ApiSample
 
       Console.WriteLine("All done, press any key to exit");
       Console.ReadKey();
+    }
+
+    private static void GetProjectData(ProjectApiClient projectApiClient)
+    {
+      var data = projectApiClient.GetProjectData();
+      Console.WriteLine("Project Name: " + data.projectName);
+      Console.WriteLine("Locales: ");
+      foreach (var targetLocale in data.targetLocales)
+      {
+        Console.WriteLine(targetLocale.localeId + " " + targetLocale.enabled);
+      }
     }
 
     private static void Deletion(FileApiClient fileClient, string fileUri)

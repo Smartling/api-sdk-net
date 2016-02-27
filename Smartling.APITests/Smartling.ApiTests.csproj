@@ -58,6 +58,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AuthApiClientTests.cs" />
+    <Compile Include="ProjectApiClientTests.cs" />
     <Compile Include="FileApiClientTests.cs" />
     <Compile Include="OAuthAuthenticationStrategyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

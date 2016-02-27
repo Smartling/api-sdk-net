@@ -67,6 +67,8 @@
     <Compile Include="Model\LastModifiedDetail.cs" />
     <Compile Include="Model\LastModifiedItem.cs" />
     <Compile Include="Model\Response.cs" />
+    <Compile Include="Project\ProjectApiClient.cs" />
+    <Compile Include="Project\ProjectResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\FileList.cs" />
     <Compile Include="Model\FileStatusDetail.cs" />
