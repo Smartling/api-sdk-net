@@ -28,7 +28,7 @@ namespace Smartling.Api.Project
       {
         response = JObject.Parse(GetResponse(request));
       }
-      catch (AuthorizationException)
+      catch (AuthenticationException)
       {
         request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken(true));
         response = JObject.Parse(GetResponse(request));

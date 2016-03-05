@@ -98,7 +98,7 @@ namespace Smartling.Api.File
         var response = JObject.Parse(GetResponse(request));
         return JsonConvert.DeserializeObject<FileUploadResult>(response["response"]["data"].ToString());
       }
-      catch (AuthorizationException)
+      catch (AuthenticationException)
       {
         var request = PrepareFilePostRequest(uriBuilder.ToString(), fileUri, fileStream, formData, auth.GetToken(true));
         var response = JObject.Parse(GetResponse(request));
@@ -117,7 +117,7 @@ namespace Smartling.Api.File
       {
         return GetResponse(request);
       }
-      catch (AuthorizationException)
+      catch (AuthenticationException)
       {
         request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken(true));
         return GetResponse(request);
@@ -132,7 +132,7 @@ namespace Smartling.Api.File
       {
         response = JObject.Parse(GetResponse(request));
       }
-      catch (AuthorizationException)
+      catch (AuthenticationException)
       {
         request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken(true));
         response = JObject.Parse(GetResponse(request));

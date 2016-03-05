@@ -16,6 +16,8 @@ namespace Smartling.Api
     private const string JsonContentType = "application/json; charset=UTF-8";
     private const string JsonAccept = "application/json";
     private const string FileNameParameterName = "file";
+    private const string AuthenticationErrorCode = "AUTHENTICATION_ERROR";
+    private const string MaintenanceModeErrorCode = "MAINTENANCE_MODE_ERROR";
     private string apiGatewayUrl;
 
     public string ApiGatewayUrl
@@ -79,9 +81,14 @@ namespace Smartling.Api
               string.Empty,
               (current, message) => string.Format("{0}{1}{2} ({3})", current, Environment.NewLine, message.message, message.details));
 
-            if (messages.Contains("HTTP 401 Unauthorized"))
+            if (messages.Contains("HTTP 401 Unauthorized") || error.response.code == AuthenticationErrorCode)
             {
-              throw new AuthorizationException(error.response.code + ": " + messages, e);
+              throw new AuthenticationException(error.response.code + ": " + messages, e);
+            }
+
+            if (error.response.code == MaintenanceModeErrorCode)
+            {
+              throw new MaintenanceModeException(error.response.code + ": " + messages, e);
             }
 
             throw new Exception(error.response.code + ": " + messages, e);

@@ -53,7 +53,8 @@
     <Compile Include="Authentication\AuthResponse.cs" />
     <Compile Include="Authentication\AuthResponseWrapper.cs" />
     <Compile Include="Authentication\AuthResponseData.cs" />
-    <Compile Include="Exceptions\AuthorizationException.cs" />
+    <Compile Include="Exceptions\MaintenanceModeException.cs" />
+    <Compile Include="Exceptions\AuthenticationException.cs" />
     <Compile Include="Extensions\FileStatusExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="File\FileApiClient.cs" />
