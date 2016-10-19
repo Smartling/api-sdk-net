@@ -2,6 +2,8 @@
 
 namespace Smartling.Api.Model
 {
+  // Response for status of single locale
+  // /files-api/v2/projects/{0}/locales/{1}/file/status
   public class FileStatusDetail
   {
     public string fileUri;
