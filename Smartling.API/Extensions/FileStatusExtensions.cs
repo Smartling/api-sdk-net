@@ -9,10 +9,10 @@ namespace Smartling.Api.Extensions
 
     public static int GetPercentComplete(this FileStatusDetail status)
     {
-      return status.totalStringCount == 0
+      return status.authorizedStringCount == 0
         ? TranslationComplete
         : Convert.ToInt32(
-          ((float) status.completedStringCount)/status.totalStringCount * TranslationComplete);
+          ((float) status.completedStringCount)/ (status.completedStringCount + status.authorizedStringCount) * TranslationComplete);
     }
   }
 }
