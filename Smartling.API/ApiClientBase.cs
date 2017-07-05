@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Smartling.Api.Authentication;
 using Smartling.Api.Exceptions;
 using Smartling.Api.Model;
 
@@ -97,7 +99,7 @@ namespace Smartling.Api
       }
     }
 
-    public virtual WebRequest PrepareJsonPostRequest(string url, object command)
+    public virtual WebRequest PrepareJsonPostRequest(string url, object command, string token)
     {
       var request = (HttpWebRequest)WebRequest.Create(url);
       var json = JsonConvert.SerializeObject(command);
@@ -108,6 +110,11 @@ namespace Smartling.Api
       request.Accept = JsonAccept;
       request.ContentLength = postBytes.Length;
       request.UserAgent = ApiClientUid.ToUserAgent();
+
+      if (!string.IsNullOrEmpty(token))
+      {
+        request.Headers.Add(AuthorizationHeaderName, "Bearer " + token);
+      }
 
       Stream requestStream = request.GetRequestStream();
       requestStream.Write(postBytes, 0, postBytes.Length);
@@ -205,6 +212,42 @@ namespace Smartling.Api
       var boundary = string.Format("----------{0:N}", Guid.NewGuid());
       request.ContentType = string.Format("multipart/form-data; boundary={0}", boundary);
       return request;
+    }
+    
+    // Retry the request in case of authentication error
+    protected JObject ExecuteGetRequest(WebRequest request, StringBuilder uriBuilder, IAuthenticationStrategy auth)
+    {
+      JObject response;
+      try
+      {
+        response = JObject.Parse(GetResponse(request));
+      }
+      catch (AuthenticationException)
+      {
+        request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken(true));
+        response = JObject.Parse(GetResponse(request));
+      }
+
+      return response;
+    }
+
+    // Retry the request in case of authentication error
+    protected JObject ExecutePostRequest(StringBuilder uriBuilder, object command, IAuthenticationStrategy auth)
+    {
+      JObject response;
+      var request = PrepareJsonPostRequest(uriBuilder.ToString(), command, auth.GetToken());
+
+      try
+      {
+        response = JObject.Parse(GetResponse(request));
+      }
+      catch (AuthenticationException)
+      {
+        request = PrepareJsonPostRequest(uriBuilder.ToString(), command, auth.GetToken(true));
+        response = JObject.Parse(GetResponse(request));
+      }
+
+      return response;
     }
 
     public Stream GetResponseStream(WebRequest request)

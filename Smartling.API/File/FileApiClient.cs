@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
-using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -124,29 +123,12 @@ namespace Smartling.Api.File
       }
     }
 
-    // Retry the request in case of authentication error
-    private JObject ExecuteRequest(WebRequest request, StringBuilder uriBuilder)
-    {
-      JObject response;
-      try
-      {
-        response = JObject.Parse(GetResponse(request));
-      }
-      catch (AuthenticationException)
-      {
-        request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken(true));
-        response = JObject.Parse(GetResponse(request));
-      }
-
-      return response;
-    }
-
     public virtual IEnumerable<FileStatus> GetFilesList()
     {
       var uriBuilder = this.GetRequestStringBuilder(string.Format(ListUrl, projectId));
 
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
-      var response = ExecuteRequest(request, uriBuilder);
+      var response = ExecuteGetRequest(request, uriBuilder, auth);
       var fileList = JsonConvert.DeserializeObject<FileList>(response["response"]["data"].ToString());
       return fileList.items;
     }
@@ -157,7 +139,7 @@ namespace Smartling.Api.File
         .AppendFormat("?{0}={1}", FileUriParameterName, fileUri);
 
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
-      var response = ExecuteRequest(request, uriBuilder);
+      var response = ExecuteGetRequest(request, uriBuilder, auth);
       return JsonConvert.DeserializeObject<FileStatus>(response["response"]["data"].ToString());
     }
 
@@ -167,7 +149,7 @@ namespace Smartling.Api.File
         .AppendFormat("?{0}={1}", FileUriParameterName, fileUri);
       
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
-      var response = ExecuteRequest(request, uriBuilder);
+      var response = ExecuteGetRequest(request, uriBuilder, auth);
       var fileStatus = JsonConvert.DeserializeObject<FileStatusDetail>(response["response"]["data"].ToString());
 
       return fileStatus;
@@ -179,7 +161,7 @@ namespace Smartling.Api.File
         .AppendFormat("?{0}={1}", FileUriParameterName, fileUri);
 
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
-      var response = ExecuteRequest(request, uriBuilder);
+      var response = ExecuteGetRequest(request, uriBuilder, auth);
       return JsonConvert.DeserializeObject<LastModified>(response["response"]["data"].ToString());
     }
 
@@ -189,7 +171,7 @@ namespace Smartling.Api.File
         .AppendFormat("?{0}={1}", FileUriParameterName, fileUri);
 
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
-      var response = ExecuteRequest(request, uriBuilder);
+      var response = ExecuteGetRequest(request, uriBuilder, auth);
       return JsonConvert.DeserializeObject<LastModifiedDetail>(response["response"]["data"].ToString());
     }
 
@@ -200,7 +182,7 @@ namespace Smartling.Api.File
         .AppendFormat("&{0}={1}", LocaleIdsParameterName, approvedLocales);
       
       var request = PreparePutRequest(uriBuilder.ToString(), auth.GetToken());
-      ExecuteRequest(request, uriBuilder);
+      ExecuteGetRequest(request, uriBuilder, auth);
     }
 
     public virtual void Unauthorize(string fileUri, string removedLocales)
@@ -210,7 +192,7 @@ namespace Smartling.Api.File
         .AppendFormat("&{0}={1}", LocaleIdsParameterName, removedLocales);
 
       var request = PrepareDeleteRequest(uriBuilder.ToString(), auth.GetToken());
-      ExecuteRequest(request, uriBuilder);
+      ExecuteGetRequest(request, uriBuilder, auth);
     }
 
     public virtual void DeleteFile(string fileUri)
@@ -219,7 +201,7 @@ namespace Smartling.Api.File
         .AppendFormat("?{0}={1}", FileUriParameterName, fileUri);
 
       var request = PrepareDeleteRequest(uriBuilder.ToString(), auth.GetToken());
-      ExecuteRequest(request, uriBuilder);
+      ExecuteGetRequest(request, uriBuilder, auth);
     }
 
     public virtual Stream GetFileStream(string fileUri, string locale)

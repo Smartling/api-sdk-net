@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace Smartling.Api.Authentication
 {
@@ -18,7 +19,7 @@ namespace Smartling.Api.Authentication
     public virtual AuthResponse Authenticate()
     {
       var command = new AuthCommand() { userIdentifier = this.userIdentifier, userSecret = this.userSecret };
-      var request = PrepareJsonPostRequest(ApiGatewayUrl + AUTH_API_V2_AUTHENTICATE, command);
+      var request = PrepareJsonPostRequest(ApiGatewayUrl + AUTH_API_V2_AUTHENTICATE, command, String.Empty);
       var jsonResponse = GetResponse(request);
       var authResponse = JsonConvert.DeserializeObject<AuthResponseWrapper>(jsonResponse);
 
@@ -28,7 +29,7 @@ namespace Smartling.Api.Authentication
     public virtual AuthResponse Refresh(string refreshToken)
     {
       var command = new RefreshCommand() { refreshToken = refreshToken };
-      var request = PrepareJsonPostRequest(ApiGatewayUrl + AUTH_API_V2_REFRESH, command);
+      var request = PrepareJsonPostRequest(ApiGatewayUrl + AUTH_API_V2_REFRESH, command, string.Empty);
       var jsonResponse = GetResponse(request);
       var refreshResponse = JsonConvert.DeserializeObject<AuthResponseWrapper>(jsonResponse);
 

@@ -32,7 +32,7 @@ namespace Smartling.ApiTests
       var auth = new OAuthAuthenticationStrategy(authClient.Object);
       authClient.CallBase = true;
       authClient.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(ValidAuthRespone);
-      authClient.Setup(foo => foo.PrepareJsonPostRequest(It.IsAny<string>(), It.IsAny<Object>())).Returns((WebRequest)null);
+      authClient.Setup(foo => foo.PrepareJsonPostRequest(It.IsAny<string>(), It.IsAny<Object>(), It.IsAny<string>())).Returns((WebRequest)null);
       return auth;
     }
 
