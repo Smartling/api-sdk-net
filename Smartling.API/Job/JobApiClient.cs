@@ -34,10 +34,10 @@ namespace Smartling.Api.Job
       return JsonConvert.DeserializeObject<AddFileToJobResponse>(response["response"]["data"].ToString());
     }
 
-    public virtual AddFileToJobResponse Authorize(string jobId, IEnumerable<LocaleWorkflow> locales)
+    public virtual AddFileToJobResponse Authorize(string jobId)
     {
       var uriBuilder = this.GetRequestStringBuilder(string.Format(JobAuthorizeUrl, projectId, jobId));
-      var response = ExecutePostRequest(uriBuilder, new { localeWorkflows = locales }, auth);
+      var response = ExecutePostRequest(uriBuilder, null, auth);
       return JsonConvert.DeserializeObject<AddFileToJobResponse>(response["response"]["data"].ToString());
     }
 

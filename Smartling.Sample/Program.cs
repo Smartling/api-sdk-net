@@ -28,7 +28,7 @@ namespace Smartling.ApiSample
       string fileUri = "ApiSample_" + Guid.NewGuid();
 
       var job = new JobRequest();
-      job.jobName = "test";
+      job.jobName = "ApiSample_Job_" + Guid.NewGuid();
       job.description = "test";
       job.dueDate = "2018-11-21T11:51:17Z";
       job.targetLocaleIds = new List<string>() { "ru-RU" };
@@ -36,10 +36,10 @@ namespace Smartling.ApiSample
       job.callbackMethod = "GET";
       job.referenceNumber = "test";
 
-      // jobApiClient.Create(job);
+      jobApiClient.Create(job);
       var jobs = jobApiClient.GetAll();
       jobApiClient.AddFile(jobs.items.First().translationJobUid,"/sitecore/content/Global/Content/Carousel Items/Developer Carousel_0720FC50_en.xml");
-      jobApiClient.Authorize(jobs.items.First().translationJobUid, new List<LocaleWorkflow>() { new LocaleWorkflow() { targetLocaleId  = "ru-RU", workflowUid = String.Empty }});
+      jobApiClient.Authorize(jobs.items.First().translationJobUid);
 
       GetProjectData(projectApiClient);
       Upload(fileApiClient, fileUri, "xml");
