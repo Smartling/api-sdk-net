@@ -122,6 +122,29 @@ namespace Smartling.Api
       return request;
     }
 
+    public virtual WebRequest PrepareJsonPutRequest(string url, object command, string token)
+    {
+      var request = (HttpWebRequest)WebRequest.Create(url);
+      var json = JsonConvert.SerializeObject(command);
+      byte[] postBytes = Encoding.UTF8.GetBytes(json);
+
+      request.Method = WebRequestMethods.Http.Put;
+      request.ContentType = JsonContentType;
+      request.Accept = JsonAccept;
+      request.ContentLength = postBytes.Length;
+      request.UserAgent = ApiClientUid.ToUserAgent();
+
+      if (!string.IsNullOrEmpty(token))
+      {
+        request.Headers.Add(AuthorizationHeaderName, "Bearer " + token);
+      }
+
+      Stream requestStream = request.GetRequestStream();
+      requestStream.Write(postBytes, 0, postBytes.Length);
+      requestStream.Close();
+      return request;
+    }
+
     public virtual WebRequest PrepareFilePostRequest(string uri, string fileName, Stream fileStream, NameValueCollection formData, string token)
     {
       var boundary = string.Format("----------{0:N}", Guid.NewGuid());
@@ -244,6 +267,25 @@ namespace Smartling.Api
       catch (AuthenticationException)
       {
         request = PrepareJsonPostRequest(uriBuilder.ToString(), command, auth.GetToken(true));
+        response = JObject.Parse(GetResponse(request));
+      }
+
+      return response;
+    }
+
+    // Retry the request in case of authentication error
+    protected JObject ExecutePutRequest(StringBuilder uriBuilder, object command, IAuthenticationStrategy auth)
+    {
+      JObject response;
+      var request = PrepareJsonPutRequest(uriBuilder.ToString(), command, auth.GetToken());
+
+      try
+      {
+        response = JObject.Parse(GetResponse(request));
+      }
+      catch (AuthenticationException)
+      {
+        request = PrepareJsonPutRequest(uriBuilder.ToString(), command, auth.GetToken(true));
         response = JObject.Parse(GetResponse(request));
       }
 

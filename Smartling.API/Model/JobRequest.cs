@@ -2,7 +2,7 @@
 
 namespace Smartling.Api.Model
 {
-  public class JobRequest
+  public class CreateJob
   {
     public string jobName { get; set; }
     public List<string> targetLocaleIds { get; set; }

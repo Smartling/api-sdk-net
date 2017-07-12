@@ -23,24 +23,10 @@ namespace Smartling.ApiSample
       var auth = new OAuthAuthenticationStrategy(authApiClient);
       var fileApiClient = new FileApiClient(auth, projectId, string.Empty);
       var projectApiClient = new ProjectApiClient(auth, projectId);
-      var jobApiClient = new JobApiClient(auth, projectId);
       fileApiClient.ApiGatewayUrl = "https://api.smartling.com";
       string fileUri = "ApiSample_" + Guid.NewGuid();
 
-      var job = new JobRequest();
-      job.jobName = "ApiSample_Job_" + Guid.NewGuid();
-      job.description = "test";
-      job.dueDate = "2018-11-21T11:51:17Z";
-      job.targetLocaleIds = new List<string>() { "ru-RU" };
-      job.callbackUrl = "https://www.callback.com/smartling/job";
-      job.callbackMethod = "GET";
-      job.referenceNumber = "test";
-
-      jobApiClient.Create(job);
-      var jobs = jobApiClient.GetAll();
-      jobApiClient.AddFile(jobs.items.First().translationJobUid,"/sitecore/content/Global/Content/Carousel Items/Developer Carousel_0720FC50_en.xml");
-      jobApiClient.Authorize(jobs.items.First().translationJobUid);
-
+      Jobs(auth);
       GetProjectData(projectApiClient);
       Upload(fileApiClient, fileUri, "xml");
       List(fileApiClient);
@@ -52,6 +38,33 @@ namespace Smartling.ApiSample
 
       Console.WriteLine("All done, press any key to exit");
       Console.ReadKey();
+    }
+
+    private static void Jobs(OAuthAuthenticationStrategy auth)
+    {
+      var jobApiClient = new JobApiClient(auth, projectId);
+      var jobRequest = new CreateJob();
+      jobRequest.jobName = "ApiSample_Job_" + Guid.NewGuid();
+      jobRequest.description = "test";
+      jobRequest.dueDate = "2018-11-21T11:51:17Z";
+      jobRequest.targetLocaleIds = new List<string>() {"ru-RU"};
+      jobRequest.callbackUrl = "https://www.callback.com/smartling/job";
+      jobRequest.callbackMethod = "GET";
+      jobRequest.referenceNumber = "test";
+
+      jobApiClient.Create(jobRequest);
+      var jobs = jobApiClient.GetAll();
+
+      var updateJob = new UpdateJob();
+      updateJob.jobName = jobRequest.jobName;
+      updateJob.description = "test2";
+      updateJob.dueDate = "2018-11-21T11:51:17Z";
+      jobApiClient.Update(updateJob, jobs.items.First().translationJobUid);
+      jobs = jobApiClient.GetAll();
+
+      jobApiClient.AddFile(jobs.items.First().translationJobUid,
+        "/sitecore/content/Global/Content/Carousel Items/Developer Carousel_0720FC50_en.xml");
+      jobApiClient.Authorize(jobs.items.First().translationJobUid);
     }
 
     private static void GetProjectData(ProjectApiClient projectApiClient)

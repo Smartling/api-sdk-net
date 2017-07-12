@@ -67,6 +67,7 @@
     <Compile Include="Model\FileStatusItem.cs" />
     <Compile Include="Model\FileStatus.cs" />
     <Compile Include="Model\Job.cs" />
+    <Compile Include="Model\UpdateJob.cs" />
     <Compile Include="Model\JobRequest.cs" />
     <Compile Include="Model\JobList.cs" />
     <Compile Include="Model\LastModified.cs" />

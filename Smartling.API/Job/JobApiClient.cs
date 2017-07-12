@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Smartling.Api.Authentication;
 using Smartling.Api.Model;
 
@@ -7,7 +6,8 @@ namespace Smartling.Api.Job
 {
   public class JobApiClient : ApiClientBase
   {
-    private readonly string JobUrl = "/jobs-api/v2/projects/{0}/jobs";
+    private readonly string CreateJobUrl = "/jobs-api/v2/projects/{0}/jobs";
+    private readonly string UpdateJobUrl = "/jobs-api/v2/projects/{0}/jobs/{1}";
     private readonly string JobFileUrl = "/jobs-api/v2/projects/{0}/jobs/{1}/file/add";
     private readonly string JobAuthorizeUrl = "/jobs-api/v2/projects/{0}/jobs/{1}/authorize";
      
@@ -20,10 +20,17 @@ namespace Smartling.Api.Job
       this.projectId = projectId;
     }
 
-    public virtual Model.Job Create(JobRequest job)
+    public virtual Model.Job Create(CreateJob job)
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(JobUrl, projectId));
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(CreateJobUrl, projectId));
       var response = ExecutePostRequest(uriBuilder, job, auth);
+      return JsonConvert.DeserializeObject<Model.Job>(response["response"]["data"].ToString());
+    }
+
+    public virtual Model.Job Update(UpdateJob job, string jobId)
+    {
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(UpdateJobUrl, projectId, jobId));
+      var response = ExecutePutRequest(uriBuilder, job, auth);
       return JsonConvert.DeserializeObject<Model.Job>(response["response"]["data"].ToString());
     }
 
@@ -43,7 +50,7 @@ namespace Smartling.Api.Job
 
     public virtual JobList GetAll()
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(JobUrl, projectId));
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(CreateJobUrl, projectId));
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
       return JsonConvert.DeserializeObject<JobList>(response["response"]["data"].ToString());
