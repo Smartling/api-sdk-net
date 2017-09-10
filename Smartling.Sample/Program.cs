@@ -62,8 +62,10 @@ namespace Smartling.ApiSample
       jobApiClient.Update(updateJob, jobs.items.First().translationJobUid);
       jobs = jobApiClient.GetAll();
 
+      jobApiClient.AddLocale("nl-NL", jobs.items.First().translationJobUid);
+
       jobApiClient.AddFile(jobs.items.First().translationJobUid,
-        "/sitecore/content/Global/Content/Carousel Items/Developer Carousel_0720FC50_en.xml");
+        "/sitecore/content/Home_110D559F_en.xml", new List<string>() {  "nl-NL" });
       jobApiClient.Authorize(jobs.items.First().translationJobUid);
     }
 

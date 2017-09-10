@@ -17,7 +17,6 @@ namespace Smartling.Api.Model
     public string createdByUserUid { get; set; }
     public string modifiedByUserUid { get; set; }
     public string jobStatus { get; set; }
-    public bool archived { get; set; }
     public string firstCompletedDate { get; set; }
     public string lastCompletedDate { get; set; }
   }
