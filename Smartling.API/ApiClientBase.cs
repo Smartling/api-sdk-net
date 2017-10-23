@@ -103,6 +103,11 @@ namespace Smartling.Api
     {
       var request = (HttpWebRequest)WebRequest.Create(url);
       var json = JsonConvert.SerializeObject(command);
+      if (command is string)
+      {
+        json = command as string;
+      }
+
       byte[] postBytes = Encoding.UTF8.GetBytes(json);
 
       request.Method = WebRequestMethods.Http.Post;

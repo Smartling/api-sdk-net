@@ -46,7 +46,7 @@ namespace Smartling.Api.Job
     public virtual AddFileToJobResponse Authorize(string jobId)
     {
       var uriBuilder = this.GetRequestStringBuilder(string.Format(JobAuthorizeUrl, projectId, jobId));
-      var response = ExecutePostRequest(uriBuilder, null, auth);
+      var response = ExecutePostRequest(uriBuilder, "{}", auth);
       return JsonConvert.DeserializeObject<AddFileToJobResponse>(response["response"]["data"].ToString());
     }
 
