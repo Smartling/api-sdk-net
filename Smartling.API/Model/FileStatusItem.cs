@@ -17,5 +17,7 @@
     public string parserVersion;
 
     public bool hasInstructions;
+
+    public int totalStringCount;
   }
 }

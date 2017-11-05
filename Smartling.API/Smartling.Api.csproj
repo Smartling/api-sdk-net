@@ -55,7 +55,6 @@
     <Compile Include="Authentication\AuthResponseData.cs" />
     <Compile Include="Exceptions\MaintenanceModeException.cs" />
     <Compile Include="Exceptions\AuthenticationException.cs" />
-    <Compile Include="Extensions\FileStatusExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="File\FileApiClient.cs" />
     <Compile Include="Job\JobApiClient.cs" />

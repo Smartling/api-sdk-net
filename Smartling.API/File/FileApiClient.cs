@@ -140,7 +140,16 @@ namespace Smartling.Api.File
 
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
-      return JsonConvert.DeserializeObject<FileStatus>(response["response"]["data"].ToString());
+      var result = JsonConvert.DeserializeObject<FileStatus>(response["response"]["data"].ToString());
+      if (result != null && result.items != null)
+      {
+        foreach (var item in result.items)
+        {
+          item.totalStringCount = result.totalStringCount;
+        }
+      }
+
+      return result;
     }
 
     public virtual FileStatusDetail GetFileStatus(string fileUri, string locale)
