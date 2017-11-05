@@ -8,16 +8,16 @@
 
     public int authorizedStringCount;
 
-    public int completedStringCount;
-
     public int authorizedWordCount;
 
+    public int completedStringCount;
+
+    public int completedWordCount;
+    
+    public int excludedStringCount;
+
     public int excludedWordCount;
-
-    public string parserVersion;
-
-    public bool hasInstructions;
-
+    
     public int totalStringCount;
   }
 }
