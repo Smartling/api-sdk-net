@@ -54,6 +54,7 @@ namespace Smartling.ApiSample
 
       jobApiClient.Create(jobRequest);
       var jobs = jobApiClient.GetAll();
+      var processes = jobApiClient.GetProcesses(jobs.items.First().translationJobUid);
 
       var updateJob = new UpdateJob();
       updateJob.jobName = jobRequest.jobName;
