@@ -65,7 +65,9 @@
     <Compile Include="Model\FileUploadResult.cs" />
     <Compile Include="Model\FileStatusItem.cs" />
     <Compile Include="Model\FileStatus.cs" />
+    <Compile Include="Model\GetProcesses.cs" />
     <Compile Include="Model\Job.cs" />
+    <Compile Include="Model\ProcessesResponse.cs" />
     <Compile Include="Model\UpdateJob.cs" />
     <Compile Include="Model\JobRequest.cs" />
     <Compile Include="Model\JobList.cs" />

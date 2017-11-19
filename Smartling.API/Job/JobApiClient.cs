@@ -12,7 +12,8 @@ namespace Smartling.Api.Job
     private readonly string JobFileUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/file/add";
     private readonly string JobAuthorizeUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/authorize";
     private readonly string AddLocaleUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/locales/{2}?syncContent={3}";
-     
+    private readonly string GetProcessesUrl = "/jobs-api/v3/projects/{0}/jobs/processes";
+
     private readonly string projectId;
     private readonly IAuthenticationStrategy auth;
 
@@ -41,6 +42,13 @@ namespace Smartling.Api.Job
       var uriBuilder = this.GetRequestStringBuilder(string.Format(JobFileUrl, projectId, jobId));
       var response = ExecutePostRequest(uriBuilder, new { fileUri, targetLocaleIds }, auth);
       return JsonConvert.DeserializeObject<AddFileToJobResponse>(response["response"]["data"].ToString());
+    }
+
+    public virtual ProcessesResponse GetProcesses(string jobId)
+    {
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(GetProcessesUrl, projectId, jobId));
+      var response = ExecutePostRequest(uriBuilder, new GetProcesses() { translationJobUids = new []{jobId} }, auth);
+      return JsonConvert.DeserializeObject<ProcessesResponse>(response["response"]["data"].ToString());
     }
 
     public virtual AddFileToJobResponse Authorize(string jobId)
