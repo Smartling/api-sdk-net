@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Smartling.Api.Authentication;
+using Smartling.Api.Batch;
 using Smartling.Api.File;
 using Smartling.Api.Job;
 using Smartling.Api.Model;
@@ -66,8 +67,20 @@ namespace Smartling.ApiSample
       jobApiClient.AddLocale("nl-NL", jobs.items.First().translationJobUid);
 
       jobApiClient.AddFile(jobs.items.First().translationJobUid,
-        "/sitecore/content/Home_110D559F_en.xml", new List<string>() {  "nl-NL" });
+        "/sitecore/content/Home/About-Launch-Sitecore/Our-Strategy/What-is-Content_07DAF0C2_en.xml", new List<string>() {  "nl-NL" });
       jobApiClient.Authorize(jobs.items.First().translationJobUid);
+
+      var batchApiClient = new BatchApiClient(auth, projectId, String.Empty);
+      var batch =
+        batchApiClient.Create(new CreateBatch()
+        {
+          authorize = true,
+          translationJobUid = jobs.items.First().translationJobUid
+        });
+
+      string fileUri = "ApiSample_" + Guid.NewGuid();
+      batchApiClient.UploadFile(@"C:\Sample.xml", fileUri, "xml", "ru-RU", true, batch.batchUid);
+      batchApiClient.Execute(batch.batchUid);
     }
 
     private static void GetProjectData(ProjectApiClient projectApiClient)
