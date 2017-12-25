@@ -14,7 +14,8 @@ namespace Smartling.Api.Batch
     private readonly string CreateBatchUrl = "/jobs-batch-api/v1/projects/{0}/batches";
     private readonly string UploadBatchUrl = "/jobs-batch-api/v1/projects/{0}/batches/{1}/file";
     private readonly string ExecuteBatchUrl = "/jobs-batch-api/v1/projects/{0}/batches/{1}";
-
+    private readonly string GetBatchUrl = "/jobs-batch-api/v1/projects/{0}/batches/{1}";
+    
     private const string FileUriParameterName = "fileUri";
     private const string FileTypeParameterName = "fileType";
     private const string CallbackUrlParameterName = "callbackUrl";
@@ -88,6 +89,15 @@ namespace Smartling.Api.Batch
     {
       var uriBuilder = this.GetRequestStringBuilder(string.Format(ExecuteBatchUrl, projectId, batchUid));
       ExecutePostRequest(uriBuilder, new ExecuteBatch() {action = "EXECUTE"}, auth);
+    }
+
+    public virtual BatchResult Get(string batchUid)
+    {
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(GetBatchUrl, projectId, batchUid));
+
+      var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
+      var response = ExecuteGetRequest(request, uriBuilder, auth);
+      return JsonConvert.DeserializeObject<BatchResult>(response["response"]["data"].ToString());
     }
   }
 }

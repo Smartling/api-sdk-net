@@ -63,12 +63,7 @@ namespace Smartling.ApiSample
       updateJob.dueDate = "2018-11-21T11:51:17Z";
       jobApiClient.Update(updateJob, jobs.items.First().translationJobUid);
       jobs = jobApiClient.GetAll();
-
       jobApiClient.AddLocale("nl-NL", jobs.items.First().translationJobUid);
-
-      jobApiClient.AddFile(jobs.items.First().translationJobUid,
-        "/sitecore/content/Home/About-Launch-Sitecore/Our-Strategy/What-is-Content_07DAF0C2_en.xml", new List<string>() {  "nl-NL" });
-      jobApiClient.Authorize(jobs.items.First().translationJobUid);
 
       var batchApiClient = new BatchApiClient(auth, projectId, String.Empty);
       var batch =
@@ -81,6 +76,8 @@ namespace Smartling.ApiSample
       string fileUri = "ApiSample_" + Guid.NewGuid();
       batchApiClient.UploadFile(@"C:\Sample.xml", fileUri, "xml", "ru-RU", true, batch.batchUid);
       batchApiClient.Execute(batch.batchUid);
+
+      var batchResult = batchApiClient.Get(batch.batchUid);
     }
 
     private static void GetProjectData(ProjectApiClient projectApiClient)

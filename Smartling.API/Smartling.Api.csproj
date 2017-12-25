@@ -60,6 +60,7 @@
     <Compile Include="File\FileApiClient.cs" />
     <Compile Include="Job\JobApiClient.cs" />
     <Compile Include="Model\AddFileToJobResponse.cs" />
+    <Compile Include="Model\BatchResult.cs" />
     <Compile Include="Model\ClientUid.cs" />
     <Compile Include="Model\CreateBatch.cs" />
     <Compile Include="Model\ExecuteBatch.cs" />
