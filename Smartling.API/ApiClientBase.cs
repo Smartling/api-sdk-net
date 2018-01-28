@@ -51,7 +51,7 @@ namespace Smartling.Api
 
     public ApiClientBase()
     {
-      ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
+      System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
     }
 
     public virtual string GetResponse(WebRequest request)
