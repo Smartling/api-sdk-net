@@ -8,6 +8,7 @@ namespace Smartling.Api.Job
   public class JobApiClient : ApiClientBase
   {
     private readonly string CreateJobUrl = "/jobs-api/v3/projects/{0}/jobs";
+    private readonly string GetJobUrl = "/jobs-api/v3/projects/{0}/jobs?jobNameFilter={1}&limit={2}&offset={3}";
     private readonly string UpdateJobUrl = "/jobs-api/v3/projects/{0}/jobs/{1}";
     private readonly string JobFileUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/file/add";
     private readonly string JobAuthorizeUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/authorize";
@@ -68,6 +69,14 @@ namespace Smartling.Api.Job
     public virtual JobList GetAll()
     {
       var uriBuilder = this.GetRequestStringBuilder(string.Format(CreateJobUrl, projectId));
+      var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
+      var response = ExecuteGetRequest(request, uriBuilder, auth);
+      return JsonConvert.DeserializeObject<JobList>(response["response"]["data"].ToString());
+    }
+
+    public virtual JobList Get(string jobNameFilter, int limit = 0, int offset = 0)
+    {
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(GetJobUrl, projectId, jobNameFilter, limit, offset));
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
       return JsonConvert.DeserializeObject<JobList>(response["response"]["data"].ToString());

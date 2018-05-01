@@ -44,6 +44,12 @@ namespace Smartling.ApiSample
     private static void Jobs(OAuthAuthenticationStrategy auth)
     {
       var jobApiClient = new JobApiClient(auth, projectId);
+
+      foreach(var job in jobApiClient.Get("ApiSample").items)
+      {
+        Console.WriteLine(job.jobName);
+      }
+      
       var jobRequest = new CreateJob();
       jobRequest.jobName = "ApiSample_Job_" + Guid.NewGuid();
       jobRequest.description = "test";
