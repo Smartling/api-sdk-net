@@ -10,24 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="bin\Debug\netstandard2.0\Smartling.Api.deps.json" />
-    <Content Include="bin\Debug\Newtonsoft.Json.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="bin\Debug\net45\Smartling.Api.dll" />
-    <None Include="bin\Debug\net45\Smartling.Api.pdb" />
-    <None Include="bin\Debug\netstandard2.0\Smartling.Api.dll" />
-    <None Include="bin\Debug\netstandard2.0\Smartling.Api.pdb" />
-    <None Include="bin\Debug\Newtonsoft.Json.dll" />
-    <None Include="bin\Debug\Newtonsoft.Json.pdb" />
-    <None Include="bin\Debug\Smartling.Api.dll" />
-    <None Include="bin\Debug\Smartling.Api.pdb" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="bin\Debug\net40\" />
-    <Folder Include="bin\Release\" />
+    <Compile Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <None Remove="bin\**" />
   </ItemGroup>
 
   <ItemGroup>
