@@ -217,7 +217,7 @@ namespace Smartling.ApiTests
       var lastModified = client.Object.GetLastModified("test", "fr-FR");
 
       // Assert
-      Assert.AreEqual(lastModified.lastModified, DateTime.Parse("2000-01-01T01:01:01Z"));
+      Assert.AreEqual(lastModified.lastModified, DateTime.Parse("2000-01-01T01:01:01Z").ToUniversalTime());
     }
   }
 }
