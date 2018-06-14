@@ -56,8 +56,7 @@ namespace Smartling.ApiTests
          ""parserVersion"" : ""3"",
          ""hasInstructions"" : ""true""}
          }
-        }
-      }";
+        }";
 
     private const string LastModifiedResponse = @"
       {
@@ -67,7 +66,8 @@ namespace Smartling.ApiTests
            ""data"": {
            ""totalCount"": ""10"",
            ""items"" : [{ ""localeId"": ""fr-FR"", ""lastModified"": ""2000-01-01T01:01:01Z"" }]        
-        }        
+        }    
+        }
       }";
 
     private const string LastModifiedDetailResponse = @"
@@ -78,6 +78,7 @@ namespace Smartling.ApiTests
            ""data"": {
            ""lastModified"": ""2000-01-01T01:01:01Z""                
         }        
+        }
       }";
     
     private static OAuthAuthenticationStrategy GetAuth()
