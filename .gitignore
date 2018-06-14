@@ -172,3 +172,8 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+*.lock
+*.ide-shm
+.vs/Smartling.Api/v15/Server/sqlite3/storage.ide
+*.ide-wal
+*.dtbcache

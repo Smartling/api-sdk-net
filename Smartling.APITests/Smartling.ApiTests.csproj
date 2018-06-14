@@ -65,13 +65,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Smartling.API\Smartling.Api.csproj">
-      <Project>{A52052C2-B074-4C02-AF5A-5AA4DAEEFA67}</Project>
-      <Name>Smartling.Api</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Smartling.API\Smartling.Api.csproj">
+      <Project>{e1c12557-b6e3-4143-8bbb-5fadf9f6e4e3}</Project>
+      <Name>Smartling.Api</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
