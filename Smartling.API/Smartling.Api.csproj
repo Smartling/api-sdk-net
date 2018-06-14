@@ -12,10 +12,6 @@
   <ItemGroup>
     <Content Include="bin\Debug\netstandard2.0\Smartling.Api.deps.json" />
     <Content Include="bin\Debug\Newtonsoft.Json.xml" />
-    <Content Include="obj\Debug\net45\Smartling.Api.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\netstandard2.0\Smartling.Api.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\Smartling.Api.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\project.assets.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,35 +23,11 @@
     <None Include="bin\Debug\Newtonsoft.Json.pdb" />
     <None Include="bin\Debug\Smartling.Api.dll" />
     <None Include="bin\Debug\Smartling.Api.pdb" />
-    <None Include="obj\Debug\CoreCompileInputs.cache" />
-    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="obj\Debug\net40\Smartling.Api.AssemblyInfoInputs.cache" />
-    <None Include="obj\Debug\net40\Smartling.Api.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\net40\Smartling.Api.csprojAssemblyReference.cache" />
-    <None Include="obj\Debug\net45\Smartling.Api.AssemblyInfoInputs.cache" />
-    <None Include="obj\Debug\net45\Smartling.Api.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\net45\Smartling.Api.csprojAssemblyReference.cache" />
-    <None Include="obj\Debug\net45\Smartling.Api.dll" />
-    <None Include="obj\Debug\net45\Smartling.Api.pdb" />
-    <None Include="obj\Debug\netstandard2.0\Smartling.API.AssemblyInfoInputs.cache" />
-    <None Include="obj\Debug\netstandard2.0\Smartling.API.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\netstandard2.0\Smartling.Api.csprojAssemblyReference.cache" />
-    <None Include="obj\Debug\netstandard2.0\Smartling.Api.dll" />
-    <None Include="obj\Debug\netstandard2.0\Smartling.Api.pdb" />
-    <None Include="obj\Debug\Smartling.Api.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\Smartling.Api.csprojAssemblyReference.cache" />
-    <None Include="obj\Debug\Smartling.Api.csprojResolveAssemblyReference.cache" />
-    <None Include="obj\Debug\Smartling.Api.dll" />
-    <None Include="obj\Debug\Smartling.Api.pdb" />
-    <None Include="obj\Smartling.Api.csproj.nuget.cache" />
-    <None Include="obj\Smartling.API.csproj.nuget.g.props" />
-    <None Include="obj\Smartling.Api.csproj.nuget.g.targets" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="bin\Debug\net40\" />
     <Folder Include="bin\Release\" />
-    <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
 
   <ItemGroup>
