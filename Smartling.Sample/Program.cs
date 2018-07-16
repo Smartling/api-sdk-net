@@ -45,7 +45,7 @@ namespace Smartling.ApiSample
     {
       var jobApiClient = new JobApiClient(auth, projectId);
 
-      foreach(var job in jobApiClient.Get("ApiSample").items)
+      foreach(var job in jobApiClient.Get("ApiSample"))
       {
         Console.WriteLine(job.jobName);
       }
@@ -60,23 +60,23 @@ namespace Smartling.ApiSample
       jobRequest.referenceNumber = "test";
 
       jobApiClient.Create(jobRequest);
-      var jobs = jobApiClient.GetAll();
-      var processes = jobApiClient.GetProcesses(jobs.items.First().translationJobUid);
+      var jobs = jobApiClient.Get();
+      var processes = jobApiClient.GetProcesses(jobs.First().translationJobUid);
 
       var updateJob = new UpdateJob();
       updateJob.jobName = jobRequest.jobName;
       updateJob.description = "test2";
       updateJob.dueDate = "2018-11-21T11:51:17Z";
-      jobApiClient.Update(updateJob, jobs.items.First().translationJobUid);
-      jobs = jobApiClient.GetAll();
-      jobApiClient.AddLocale("nl-NL", jobs.items.First().translationJobUid);
+      jobApiClient.Update(updateJob, jobs.First().translationJobUid);
+      jobs = jobApiClient.Get();
+      jobApiClient.AddLocale("nl-NL", jobs.First().translationJobUid);
 
       var batchApiClient = new BatchApiClient(auth, projectId, String.Empty);
       var batch =
         batchApiClient.Create(new CreateBatch()
         {
           authorize = true,
-          translationJobUid = jobs.items.First().translationJobUid
+          translationJobUid = jobs.First().translationJobUid
         });
 
       string fileUri = "ApiSample_" + Guid.NewGuid();

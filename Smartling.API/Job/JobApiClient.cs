@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using Newtonsoft.Json;
 using Smartling.Api.Authentication;
 using Smartling.Api.Model;
@@ -8,7 +9,8 @@ namespace Smartling.Api.Job
   public class JobApiClient : ApiClientBase
   {
     private readonly string CreateJobUrl = "/jobs-api/v3/projects/{0}/jobs";
-    private readonly string GetJobUrl = "/jobs-api/v3/projects/{0}/jobs?jobNameFilter={1}&limit={2}&offset={3}";
+    private readonly string GetJobUrl = "/jobs-api/v3/projects/{0}/jobs?limit={1}&offset={2}";
+    private readonly string GetJobByNameUrl = "/jobs-api/v3/projects/{0}/jobs?jobName={1}&limit={2}&offset={3}";
     private readonly string UpdateJobUrl = "/jobs-api/v3/projects/{0}/jobs/{1}";
     private readonly string JobFileUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/file/add";
     private readonly string JobAuthorizeUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/authorize";
@@ -17,6 +19,7 @@ namespace Smartling.Api.Job
 
     private readonly string projectId;
     private readonly IAuthenticationStrategy auth;
+    private const int PageSize = 500;
 
     public JobApiClient(IAuthenticationStrategy auth, string projectId)
     {
@@ -66,17 +69,35 @@ namespace Smartling.Api.Job
       return JsonConvert.DeserializeObject<AddFileToJobResponse>(response["response"]["data"].ToString());
     }
 
-    public virtual JobList GetAll()
+    public virtual List<Smartling.Api.Model.Job> Get(string jobName = "")
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(CreateJobUrl, projectId));
-      var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
-      var response = ExecuteGetRequest(request, uriBuilder, auth);
-      return JsonConvert.DeserializeObject<JobList>(response["response"]["data"].ToString());
+      var page = GetPage(jobName, PageSize, 0);
+      var results = new List<Smartling.Api.Model.Job>();
+      var pageNumber = 0;
+      results.AddRange(page.items);
+
+      while (page.totalCount > results.Count && page.items.Count > 0)
+      {
+        pageNumber++;
+        page = GetPage(jobName, PageSize, PageSize * pageNumber);
+        results.AddRange(page.items);
+      }
+
+      return results;
     }
 
-    public virtual JobList Get(string jobNameFilter, int limit = 0, int offset = 0)
+    public virtual JobList GetPage(string jobName, int limit, int offset)
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(GetJobUrl, projectId, jobNameFilter, limit, offset));
+      StringBuilder uriBuilder;
+      if (string.IsNullOrEmpty(jobName))
+      {
+        uriBuilder = this.GetRequestStringBuilder(string.Format(GetJobUrl, projectId, limit, offset));
+      }
+      else
+      {
+        uriBuilder = this.GetRequestStringBuilder(string.Format(GetJobByNameUrl, projectId, jobName, limit, offset));
+      }
+
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
       return JsonConvert.DeserializeObject<JobList>(response["response"]["data"].ToString());
