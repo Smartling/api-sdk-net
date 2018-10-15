@@ -27,6 +27,7 @@ namespace Smartling.ApiSample
       fileApiClient.ApiGatewayUrl = "https://api.smartling.com";
       string fileUri = "ApiSample_" + Guid.NewGuid();
 
+      Published(auth);
       Jobs(auth);
       GetProjectData(projectApiClient);
       Upload(fileApiClient, fileUri, "xml");
@@ -39,6 +40,16 @@ namespace Smartling.ApiSample
 
       Console.WriteLine("All done, press any key to exit");
       Console.ReadKey();
+    }
+
+    private static void Published(OAuthAuthenticationStrategy auth)
+    {
+      var publishedClient = new PublishedFilesApiClient(auth, projectId);
+
+      foreach (var item in publishedClient.GetRecentlyPublished())
+      {
+        Console.WriteLine(item.fileUri + " " + item.localeId + " " + item.publishDate);
+      }
     }
 
     private static void Jobs(OAuthAuthenticationStrategy auth)
