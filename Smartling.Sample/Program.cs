@@ -27,6 +27,7 @@ namespace Smartling.ApiSample
       fileApiClient.ApiGatewayUrl = "https://api.smartling.com";
       string fileUri = "ApiSample_" + Guid.NewGuid();
 
+      Audit(auth);
       Published(auth);
       Jobs(auth);
       GetProjectData(projectApiClient);
@@ -40,6 +41,14 @@ namespace Smartling.ApiSample
 
       Console.WriteLine("All done, press any key to exit");
       Console.ReadKey();
+    }
+
+    private static void Audit(OAuthAuthenticationStrategy auth)
+    {
+      var client = new AuditApiClient(auth, projectId);
+      client.Create(new AuditLog() { action_type = ActionType.Download, description = "test", user_id = "test" });
+
+      var logs = client.Get();
     }
 
     private static void Published(OAuthAuthenticationStrategy auth)
