@@ -27,6 +27,7 @@ namespace Smartling.ApiSample
       fileApiClient.ApiGatewayUrl = "https://api.smartling.com";
       string fileUri = "ApiSample_" + Guid.NewGuid();
 
+      Submissions(auth);
       Published(auth);
       Jobs(auth);
       GetProjectData(projectApiClient);
@@ -49,6 +50,52 @@ namespace Smartling.ApiSample
       foreach (var item in publishedClient.GetRecentlyPublished())
       {
         Console.WriteLine(item.fileUri + " " + item.localeId + " " + item.publishDate);
+      }
+    }
+    
+    private static void Submissions(OAuthAuthenticationStrategy auth)
+    {
+      var client = new SubmissionApiClient(auth, projectId, "test");
+
+      // Create translation request
+      var createTranslationRequest = new CreateTranslationRequest();
+      createTranslationRequest.contentHash = "qwerty" + Guid.NewGuid();
+      createTranslationRequest.fileUri = Guid.NewGuid().ToString();
+      createTranslationRequest.originalAssetKey = new OriginalAssetKey();
+      createTranslationRequest.originalLocaleId = "en";
+      createTranslationRequest.title = "test";
+
+      var request = client.CreateTranslationRequest(createTranslationRequest);
+
+      // Create subsmission
+      var submission = new CreateSubmissionRequest();
+      submission.state = "In Progress";
+      submission.submitterName = "test";
+      submission.targetLocaleId = "ru-RU";
+      submission.targetAssetKey = new TargetAssetKey() { a = "test" + Guid.NewGuid() };
+
+      var details = new CreateSubmissionDetails();
+      details.translationSubmissions = new List<CreateSubmissionRequest>() { submission };
+      details.translationRequestUid = request.translationRequestUid;
+
+      request = client.CreateDetails(details);
+
+      // Update submission
+      var updateRequest = new UpdateTranslationRequest();
+      updateRequest.translationSubmissions = new List<UpdateSubmissionRequest> {new UpdateSubmissionRequest {
+        translationSubmissionUid = request.translationSubmissions[0].translationSubmissionUid,
+        submitterName = "test2",
+        state = "In Progress",
+        percentComplete = 0,
+        targetAssetKey =  request.translationSubmissions[0].targetAssetKey
+      }  };
+
+      var updatedRequest = client.UpdateTranslationRequest(updateRequest, request.translationRequestUid);
+      
+      // List translation requests
+      foreach (var s in client.Get(string.Empty))
+      {
+        Console.WriteLine(s.bucketName);
       }
     }
 
