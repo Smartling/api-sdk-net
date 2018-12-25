@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Smartling.Api.Model;
+using System.IO;
 
 namespace Smartling.Api.Extensions
 {
@@ -12,6 +13,19 @@ namespace Smartling.Api.Extensions
       writer.Flush();
       stream.Position = 0;
       return stream;
+    }
+
+    public static string GetName(this ActionType actionType)
+    {
+      switch (actionType)
+      {
+        case ActionType.Download:
+          return "DOWNLOAD";
+        case ActionType.Upload:
+          return "UPLOAD";
+      }
+
+      return string.Empty;
     }
   }
 }

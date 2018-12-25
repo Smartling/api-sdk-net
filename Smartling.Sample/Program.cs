@@ -9,6 +9,7 @@ using Smartling.Api.Project;
 
 namespace Smartling.ApiSample
 {
+  using Smartling.Api.Extensions;
   using System;
   
   internal class Program
@@ -46,9 +47,9 @@ namespace Smartling.ApiSample
     private static void Audit(OAuthAuthenticationStrategy auth)
     {
       var client = new AuditApiClient(auth, projectId);
-      client.Create(new AuditLog() { action_type = ActionType.Download, description = "test", user_id = "test" });
+      client.Create(new AuditLog(ActionType.Upload, "testuser", Guid.NewGuid().ToString(), "test_uri", "/sitecore/content", "test_job", 1, null, "en", "ru-RU"));
 
-      var logs = client.Get();
+      var logs = client.Get(null, "_id:desc");
     }
 
     private static void Published(OAuthAuthenticationStrategy auth)
