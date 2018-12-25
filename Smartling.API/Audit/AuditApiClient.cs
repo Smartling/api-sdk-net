@@ -9,7 +9,7 @@ namespace Smartling.Api.Project
   public class AuditApiClient : ApiClientBase
   {
     private readonly string CreateLogUrl = "/audit-log-api/v2/projects/{0}/logs";
-    private readonly string GetLogsUrl = "/audit-log-api/v2/projects/{0}/logs?limit={1}&offset={2}";
+    private readonly string GetLogsUrl = "/audit-log-api/v2/projects/{0}/logs?size={1}&from={2}";
 
     private readonly string projectId;
     private readonly IAuthenticationStrategy auth;
