@@ -9,6 +9,7 @@ using Smartling.Api.Project;
 
 namespace Smartling.ApiSample
 {
+  using Smartling.Api.Extensions;
   using System;
   
   internal class Program
@@ -27,6 +28,7 @@ namespace Smartling.ApiSample
       fileApiClient.ApiGatewayUrl = "https://api.smartling.com";
       string fileUri = "ApiSample_" + Guid.NewGuid();
 
+      Audit(auth);
       Published(auth);
       Jobs(auth);
       GetProjectData(projectApiClient);
@@ -40,6 +42,14 @@ namespace Smartling.ApiSample
 
       Console.WriteLine("All done, press any key to exit");
       Console.ReadKey();
+    }
+
+    private static void Audit(OAuthAuthenticationStrategy auth)
+    {
+      var client = new AuditApiClient(auth, projectId);
+      client.Create(new AuditLog(ActionType.Upload, "testuser", Guid.NewGuid().ToString(), "test_uri", "/sitecore/content", "test_job", 1, null, "en", "ru-RU"));
+
+      var logs = client.Get(null, "_id:desc");
     }
 
     private static void Published(OAuthAuthenticationStrategy auth)
