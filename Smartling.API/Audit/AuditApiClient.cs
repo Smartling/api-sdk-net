@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Smartling.Api.Authentication;
+using Smartling.Api.Extensions;
 using Smartling.Api.Model;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Smartling.Api.Project
@@ -9,7 +11,7 @@ namespace Smartling.Api.Project
   public class AuditApiClient : ApiClientBase
   {
     private readonly string CreateLogUrl = "/audit-log-api/v2/projects/{0}/logs";
-    private readonly string GetLogsUrl = "/audit-log-api/v2/projects/{0}/logs?size={1}&from={2}";
+    private readonly string GetLogsUrl = "/audit-log-api/v2/projects/{0}/logs?limit={1}&offset={2}";
 
     private readonly string projectId;
     private readonly IAuthenticationStrategy auth;
@@ -51,10 +53,20 @@ namespace Smartling.Api.Project
       if(query != null)
       {
         uriBuilder.Append("&q=");
+        var clauses = new List<string>();
         foreach(var key in query.Keys)
         {
-          uriBuilder.Append(key + ":" + query[key]);
+          if (key == string.Empty)
+          {
+            clauses.Add(query[key].EscapeSearchQuery());
+          }
+          else
+          {
+            clauses.Add(key + ":" + query[key].EscapeSearchQuery());
+          }
         }
+
+        uriBuilder.Append(string.Join(" AND ", clauses.ToArray()));
       }
 
       if (!string.IsNullOrEmpty(sort))
