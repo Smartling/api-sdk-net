@@ -78,20 +78,22 @@ namespace Smartling.ApiSample
       var jobRequest = new CreateJob();
       jobRequest.jobName = "ApiSample_Job_" + Guid.NewGuid();
       jobRequest.description = "test";
-      jobRequest.dueDate = "2018-11-21T11:51:17Z";
+      jobRequest.dueDate = DateTime.Now.AddMonths(1).ToString("yyyy-MM-ddTHH:mm:ssZ");
       jobRequest.targetLocaleIds = new List<string>() {"ru-RU"};
       jobRequest.callbackUrl = "https://www.callback.com/smartling/job";
       jobRequest.callbackMethod = "GET";
       jobRequest.referenceNumber = "test";
 
-      jobApiClient.Create(jobRequest);
+      var createdJob = jobApiClient.Create(jobRequest);
+      createdJob = jobApiClient.GetById(createdJob.translationJobUid);
+
       var jobs = jobApiClient.Get();
       var processes = jobApiClient.GetProcesses(jobs.First().translationJobUid);
 
       var updateJob = new UpdateJob();
       updateJob.jobName = jobRequest.jobName;
       updateJob.description = "test2";
-      updateJob.dueDate = "2018-11-21T11:51:17Z";
+      updateJob.dueDate = DateTime.Now.AddMonths(1).ToString("yyyy-MM-ddTHH:mm:ssZ");
       jobApiClient.Update(updateJob, jobs.First().translationJobUid);
       jobs = jobApiClient.Get();
       jobApiClient.AddLocale("nl-NL", jobs.First().translationJobUid);
