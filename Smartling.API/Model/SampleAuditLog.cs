@@ -31,7 +31,7 @@ namespace Smartling.Api.Model
       this.item_id = builder.item_id;
       this.file_uri = builder.file_uri;
       this.path = builder.path;
-      this.job_name = builder.job_name;
+      this.job_name = builder.translation_job_name;
       this.source_version = builder.source_version;
       this.target_version = builder.target_version;
       this.source_locale_id = builder.source_locale_id;

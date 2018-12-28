@@ -10,7 +10,7 @@
     public string path { get; set; }
     public string file_uri { get; set; }
     public string translation_job_uid { get; set; }
-    public string job_name { get; set; }
+    public string translation_job_name { get; set; }
     public string source_database { get; set; }
     public string source_locale_id { get; set; }
     public int? source_version { get; set; }
@@ -27,9 +27,10 @@
       this.path = path;
     }
 
-    public SampleAuditLogBuilder WithJob(string job_name)
+    public SampleAuditLogBuilder WithJob(string translation_job_name, string translation_job_uid)
     {
-      this.job_name = job_name;
+      this.translation_job_name = translation_job_name;
+      this.translation_job_uid = translation_job_uid;
       return this;
     }
 
