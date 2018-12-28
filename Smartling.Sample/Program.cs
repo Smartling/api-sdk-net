@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using System.Linq;
 using Smartling.Api.Authentication;
 using Smartling.Api.Batch;
@@ -9,10 +10,6 @@ using Smartling.Api.Project;
 
 namespace Smartling.ApiSample
 {
-  using Smartling.Api.Extensions;
-  using System;
-  using static Smartling.Api.Model.AuditLog;
-
   internal class Program
   {
     private static string userIdentifier;
@@ -47,8 +44,8 @@ namespace Smartling.ApiSample
 
     private static void Audit(OAuthAuthenticationStrategy auth)
     {
-      var client = new AuditApiClient(auth, projectId);
-      client.Create(new AuditLogBuilder("UPLOAD", "testuser", Guid.NewGuid().ToString(), "test_uri", "/sitecore/content").WithJob("test_job").WithSourceVersion(1).WithSourceLocale("en"));
+      var client = new AuditApiClient<SampleAuditLog>(auth, projectId);
+      client.Create(new SampleAuditLogBuilder("UPLOAD", "testuser", Guid.NewGuid().ToString(), "test_uri", "/sitecore/content").WithJob("test_job").WithSourceVersion(1).WithSourceLocale("en"));
 
       var query = new Dictionary<string, string>();
       query.Add(string.Empty, "3E241E52-3767-464D-B994-A776C8A060C3");

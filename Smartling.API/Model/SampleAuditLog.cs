@@ -2,7 +2,7 @@
 
 namespace Smartling.Api.Model
 {
-  public partial class AuditLog
+  public partial class SampleAuditLog : IAuditLog
   {
     public string action_type { get; set; }
     public string user_id { get; set; }
@@ -19,11 +19,11 @@ namespace Smartling.Api.Model
     public string target_locale_id { get; set; }
     public int? target_version { get; set; }
 
-    public AuditLog()
+    public SampleAuditLog()
     {
     }
 
-    public AuditLog(AuditLogBuilder builder)
+    public SampleAuditLog(SampleAuditLogBuilder builder)
     {
       this.action_type = builder.action_type;
       this.user_id = builder.user_id;
