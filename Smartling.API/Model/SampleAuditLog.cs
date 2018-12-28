@@ -7,6 +7,7 @@ namespace Smartling.Api.Model
     public string action_type { get; set; }
     public string user_id { get; set; }
     public string time { get; set; }
+    public string bucket_name { get; set; }
     public string description { get; set; }
     public string item_id { get; set; }
     public string path { get; set; }
@@ -36,6 +37,7 @@ namespace Smartling.Api.Model
       this.source_locale_id = builder.source_locale_id;
       this.target_locale_id = builder.target_locale_id;
       this.time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+      this.bucket_name = builder.bucket_name;
     }
   }
 }

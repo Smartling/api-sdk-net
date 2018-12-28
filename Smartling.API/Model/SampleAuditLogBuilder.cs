@@ -2,6 +2,7 @@
 {
   public class SampleAuditLogBuilder
   {
+    public string bucket_name { get; set; }
     public string action_type { get; set; }
     public string user_id { get; set; }
     public string description { get; set; }
@@ -16,8 +17,9 @@
     public string target_locale_id { get; set; }
     public int? target_version { get; set; }
 
-    public SampleAuditLogBuilder(string action_type, string user_id, string item_id, string file_uri, string path)
+    public SampleAuditLogBuilder(string bucket_name, string action_type, string user_id, string item_id, string file_uri, string path)
     {
+      this.bucket_name = bucket_name;
       this.action_type = action_type;
       this.user_id = user_id;
       this.item_id = item_id;
