@@ -2,6 +2,7 @@
 using Smartling.Api.Authentication;
 using Smartling.Api.Extensions;
 using Smartling.Api.Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -24,6 +25,16 @@ namespace Smartling.Api.Project
 
     public virtual void Create(T log)
     {
+      if (string.IsNullOrEmpty(log.bucket_name))
+      {
+        throw new Exception("Field 'bucket_name' is required.");
+      }
+
+      if (log.time == DateTime.MinValue)
+      {
+        throw new Exception("Field 'time' is required.");
+      }
+
       var uriBuilder = this.GetRequestStringBuilder(string.Format(CreateLogUrl, projectId));
       var response = ExecutePostRequest(uriBuilder, log, auth);
     }
