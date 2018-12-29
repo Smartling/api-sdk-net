@@ -2,9 +2,9 @@
 
 namespace Smartling.Api.Model
 {
-  public class AuditLogList
+  public class AuditLogList<T>
   {
     public int totalCount { get; set; }
-    public List<AuditLog> items { get; set; }
+    public List<T> items { get; set; }
   }
 }
