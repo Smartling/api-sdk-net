@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Smartling.Api.Project
 {
-  public class AuditApiClient<T> : ApiClientBase where T : IAuditLog
+  public class AuditApiClient<T> : ApiClientBase where T : BaseAuditLog
   {
     private readonly string CreateLogUrl = "/audit-log-api/v2/projects/{0}/logs";
     private readonly string GetLogsUrl = "/audit-log-api/v2/projects/{0}/logs?limit={1}&offset={2}";

@@ -1,6 +1,9 @@
-﻿namespace Smartling.Api.Model
+﻿using Newtonsoft.Json;
+using System;
+
+namespace Smartling.Api.Model
 {
-  public interface IAuditLog
+  public class BaseAuditLog
   {
     /// <summary>
     /// Datetime when event happened in "yyyy-MM-ddTHH:i:sZ" format.
@@ -12,7 +15,9 @@
     /// DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
     /// </code>
     /// </example>
-    string time { get; set; }
+    [JsonConverter(typeof(IsoDateTimeJsonConverter))]
+    public DateTime time { get; set; }
+
     /// <summary>
     /// Virtual bucket name for your audit records
     /// </summary>
@@ -23,6 +28,6 @@
     /// <example>
     /// Bucket name can be your env name. An example: stg; prod; local_dev_jack
     /// </example>
-    string bucket_name { get; set; }
+    public string bucket_name { get; set; }
   }
 }
