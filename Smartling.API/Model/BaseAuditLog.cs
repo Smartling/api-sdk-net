@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Smartling.Api.Model
 {
@@ -29,5 +30,10 @@ namespace Smartling.Api.Model
     /// Bucket name can be your env name. An example: stg; prod; local_dev_jack
     /// </example>
     public string bucket_name { get; set; }
+
+    /// <summary>
+    /// Custom fields
+    /// </summary>
+    public Dictionary<string, string> custom_fields { get; set; }
   }
 }

@@ -45,10 +45,16 @@ namespace Smartling.ApiSample
     private static void Audit(OAuthAuthenticationStrategy auth)
     {
       var client = new AuditApiClient<SampleAuditLog>(auth, projectId);
-      client.Create(new SampleAuditLogBuilder("sandbox", "UPLOAD", "testuser", Guid.NewGuid().ToString(), "test_uri", "/sitecore/content")
+      SampleAuditLog log = new SampleAuditLogBuilder("sandbox", "UPLOAD", "testuser", Guid.NewGuid().ToString(), "test_uri", "/sitecore/content")
         .WithJob("test_job", "aabbcc")
         .WithSourceVersion(1)
-        .WithSourceLocale("en"));
+        .WithSourceLocale("en");
+
+      var custom = new Dictionary<string, string>();
+      custom.Add("some_field", "some_value");
+      log.custom_fields = custom;
+
+      client.Create(log);
 
       var query = new Dictionary<string, string>();
       query.Add(string.Empty, "3E241E52-3767-464D-B994-A776C8A060C3");
