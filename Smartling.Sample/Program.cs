@@ -58,7 +58,7 @@ namespace Smartling.ApiSample
 
       var query = new Dictionary<string, string>();
       query.Add("item_id|path", "3E241E52-3767-464D-B994-A776C8A060C3");
-      query.Add("source_locale_id", "en");
+      query.Add("source_locale_id", "en|ru");
 
       var logs = client.Get(query, "_id:desc");
     }
