@@ -62,27 +62,7 @@ namespace Smartling.Api.Project
       uriBuilder = this.GetRequestStringBuilder(string.Format(GetLogsUrl, projectId, limit, offset));
       if(query != null && query.Count > 0)
       {
-        uriBuilder.Append("&q=");
-        var clauses = new List<string>();
-        foreach(var key in query.Keys)
-        {
-          if (key == string.Empty)
-          {
-            clauses.Add(query[key].EscapeSearchQuery());
-          }
-          else
-          {
-            var fieldClauses = new List<string>();
-            foreach(var field in key.Split('|'))
-            {
-              fieldClauses.Add(field + ":" + query[key].EscapeSearchQuery());
-            }
-
-            clauses.Add("(" + string.Join(" OR ", fieldClauses.ToArray()) + ")");
-          }
-        }
-
-        uriBuilder.Append(string.Join(" AND ", clauses.ToArray()));
+        BuildSearchQuery(query, uriBuilder);
       }
 
       if (!string.IsNullOrEmpty(sort))
@@ -93,6 +73,38 @@ namespace Smartling.Api.Project
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
       return JsonConvert.DeserializeObject<AuditLogList<T>>(response["response"]["data"].ToString());
+    }
+
+    // TODO: Move to QueryBuilder and cover with unit tests
+    private static void BuildSearchQuery(Dictionary<string, string> query, StringBuilder uriBuilder)
+    {
+      uriBuilder.Append("&q=");
+      var clauses = new List<string>();
+      foreach (var key in query.Keys)
+      {
+        if (key == string.Empty)
+        {
+          clauses.Add(query[key].EscapeSearchQuery());
+        }
+        else
+        {
+          var fieldClauses = new List<string>();
+          foreach (var field in key.Split('|'))
+          {
+            var valueClauses = new List<string>();
+            foreach (var val in query[key].EscapeSearchQuery().Split('|'))
+            {
+              valueClauses.Add(field + ":" + val);
+            }
+
+            fieldClauses.Add("(" + string.Join(" OR ", valueClauses.ToArray()) + ")");
+          }
+
+          clauses.Add("(" + string.Join(" OR ", fieldClauses.ToArray()) + ")");
+        }
+      }
+
+      uriBuilder.Append(string.Join(" AND ", clauses.ToArray()));
     }
   }
 }
