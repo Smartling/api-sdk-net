@@ -60,7 +60,7 @@ namespace Smartling.Api.Project
     {
       StringBuilder uriBuilder;
       uriBuilder = this.GetRequestStringBuilder(string.Format(GetLogsUrl, projectId, limit, offset));
-      if(query != null)
+      if(query != null && query.Count > 0)
       {
         uriBuilder.Append("&q=");
         var clauses = new List<string>();
@@ -72,7 +72,13 @@ namespace Smartling.Api.Project
           }
           else
           {
-            clauses.Add(key + ":" + query[key].EscapeSearchQuery());
+            var fieldClauses = new List<string>();
+            foreach(var field in key.Split('|'))
+            {
+              fieldClauses.Add(field + ":" + query[key].EscapeSearchQuery());
+            }
+
+            clauses.Add("(" + string.Join(" OR ", fieldClauses.ToArray()) + ")");
           }
         }
 
