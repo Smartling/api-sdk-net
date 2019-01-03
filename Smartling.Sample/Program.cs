@@ -27,8 +27,8 @@ namespace Smartling.ApiSample
       string fileUri = "ApiSample_" + Guid.NewGuid();
 
       Audit(auth);
-      Published(auth);
       Jobs(auth);
+      Published(auth);
       GetProjectData(projectApiClient);
       Upload(fileApiClient, fileUri, "xml");
       List(fileApiClient);
@@ -57,9 +57,10 @@ namespace Smartling.ApiSample
       client.Create(log);
 
       var query = new Dictionary<string, string>();
-      query.Add(string.Empty, "3E241E52-3767-464D-B994-A776C8A060C3");
+      query.Add("item_id|path", "3E241E52-3767-464D-B994-A776C8A060C3");
+      query.Add("source_locale_id", "en");
 
-      var logs = client.Get(null, "_id:desc");
+      var logs = client.Get(query, "_id:desc");
     }
 
     private static void Published(OAuthAuthenticationStrategy auth)
@@ -100,7 +101,7 @@ namespace Smartling.ApiSample
       updateJob.jobName = jobRequest.jobName;
       updateJob.description = "test2";
       updateJob.dueDate = DateTime.Now.AddMonths(1).ToString("yyyy-MM-ddTHH:mm:ssZ");
-      jobApiClient.Update(updateJob, jobs.First().translationJobUid);
+      var updatedJob = jobApiClient.Update(updateJob, jobs.First().translationJobUid);
       jobs = jobApiClient.Get();
       jobApiClient.AddLocale("nl-NL", jobs.First().translationJobUid);
 
