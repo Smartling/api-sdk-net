@@ -20,7 +20,7 @@ namespace Smartling.Api.Extensions
     public static string EscapeSearchQuery(this string query)
     {
       if (string.IsNullOrWhiteSpace(query)) return query;
-      char[] special = { '+', '-', '=', '>', '<', '!', '(', ')', '{', '}', '[', ']', '^', '\"', '~', '*', '?', ':', '\\', '/', ' ' };
+      char[] special = { '+', '-', '=', '>', '<', '!', '(', ')', '{', '}', '[', ']', '^', '\"', '~', '?', ':', '\\', '/', ' ' };
       char[] qArray = query.ToCharArray();
 
       var sb = new StringBuilder();
