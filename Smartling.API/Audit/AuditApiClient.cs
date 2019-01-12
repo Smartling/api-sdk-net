@@ -25,14 +25,19 @@ namespace Smartling.Api.Project
 
     public virtual void Create(T log)
     {
-      if (string.IsNullOrEmpty(log.bucket_name))
+      if (string.IsNullOrEmpty(log.envId))
       {
-        throw new Exception("Field 'bucket_name' is required.");
+        throw new Exception("Field 'envId' is required.");
       }
 
-      if (log.time == DateTime.MinValue)
+      if (string.IsNullOrEmpty(log.actionType))
       {
-        throw new Exception("Field 'time' is required.");
+        throw new Exception("Field 'actionType' is required.");
+      }
+
+      if (log.actionTime == DateTime.MinValue)
+      {
+        throw new Exception("Field 'actionTime' is required.");
       }
 
       var uriBuilder = this.GetRequestStringBuilder(string.Format(CreateLogUrl, projectId));
