@@ -30,10 +30,11 @@
       this.clientData.Path = path;
     }
 
-    public SampleAuditLogBuilder WithJob(string translationJobName, string translationJobUid)
+    public SampleAuditLogBuilder WithJob(string translationJobName, string translationJobUid, string batchUid)
     {
       this.translationJobName = translationJobName;
       this.translationJobUid = translationJobUid;
+      this.batchUid = batchUid;
       return this;
     }
 

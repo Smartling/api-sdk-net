@@ -48,7 +48,7 @@ namespace Smartling.ApiSample
       var client = new AuditApiClient<SampleAuditLog>(auth, projectId);
       var itemId = Guid.NewGuid().ToString();
       SampleAuditLog log = new SampleAuditLogBuilder("sandbox2", "UPLOAD", "testuser", itemId, "test_uri", "/sitecore/content")
-        .WithJob("test_job", "aabbcc")
+        .WithJob("test_job", "aabbcc", "batch1")
         .WithSourceVersion(1)
         .WithSourceLocale("en");
       
