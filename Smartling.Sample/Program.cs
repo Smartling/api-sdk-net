@@ -7,6 +7,7 @@ using Smartling.Api.File;
 using Smartling.Api.Job;
 using Smartling.Api.Model;
 using Smartling.Api.Project;
+using System.Threading;
 
 namespace Smartling.ApiSample
 {
@@ -45,20 +46,21 @@ namespace Smartling.ApiSample
     private static void Audit(OAuthAuthenticationStrategy auth)
     {
       var client = new AuditApiClient<SampleAuditLog>(auth, projectId);
-      SampleAuditLog log = new SampleAuditLogBuilder("sandbox", "UPLOAD", "testuser", Guid.NewGuid().ToString(), "test_uri", "/sitecore/content")
-        .WithJob("test_job", "aabbcc")
+      var itemId = Guid.NewGuid().ToString();
+      SampleAuditLog log = new SampleAuditLogBuilder("sandbox2", "UPLOAD", "testuser", itemId, "test_uri", "/sitecore/content")
+        .WithJob("test_job", "aabbcc", "batch1")
         .WithSourceVersion(1)
         .WithSourceLocale("en");
-
-      var custom = new Dictionary<string, string>();
-      custom.Add("some_field", "some_value");
-      log.custom_fields = custom;
-
+      
       client.Create(log);
 
+      // Wait for audit log to be created and processed
+      Thread.Sleep(1000);
+
       var query = new Dictionary<string, string>();
-      query.Add("item_id|path", "3E241E52-3767-464D-B994-A776C8A060C3");
-      query.Add("source_locale_id", "en|ru");
+      query.Add("clientData.ItemId|clientData.Path", itemId);
+      query.Add("sourceLocaleId", "en|ru");
+      query.Add("envId", "sandbox2");
 
       var logs = client.Get(query, "_id:desc");
     }

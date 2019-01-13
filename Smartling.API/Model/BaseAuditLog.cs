@@ -17,7 +17,12 @@ namespace Smartling.Api.Model
     /// </code>
     /// </example>
     [JsonConverter(typeof(IsoDateTimeJsonConverter))]
-    public DateTime time { get; set; }
+    public DateTime actionTime { get; set; }
+
+    /// <summary>
+    ///  Event types. Possible events are: "UPLOAD", "DOWNLOAD", etc.
+    /// </summary>
+    public string actionType { get; set; }
 
     /// <summary>
     /// Virtual bucket name for your audit records
@@ -27,13 +32,23 @@ namespace Smartling.Api.Model
     /// the same project_uid. 
     /// </remarks>
     /// <example>
-    /// Bucket name can be your env name. An example: stg; prod; local_dev_jack
+    /// envId name can be your env name. An example: stg; prod; local_dev_jack
     /// </example>
-    public string bucket_name { get; set; }
+    public string envId { get; set; }
 
-    /// <summary>
-    /// Custom fields
-    /// </summary>
-    public Dictionary<string, string> custom_fields { get; set; }
+    public string fileUri { get; set; }
+    public string translationJobUid { get; set; }
+    public string translationJobName { get; set; }
+    public string translationJobDueDate { get; set; }
+    public bool translationJobAutorize { get; set; }
+    public string batchUid { get; set; }
+    public string sourceLocaleId { get; set; }
+    public string targetLocaleId { get; set; }
+    public string targetLocaleIds { get; set; }
+    public string description { get; set; }
+
+    public string clientUserId { get; set; }
+    public string clientUserEmail { get; set; }
+    public string clientUserName { get; set; }
   }
 }
