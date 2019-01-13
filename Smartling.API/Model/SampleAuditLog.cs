@@ -25,7 +25,7 @@ namespace Smartling.Api.Model
       this.clientData.TargetVersion = builder.clientData.TargetVersion;
       this.clientData.SourceDatabase = builder.clientData.SourceDatabase;
       this.sourceLocaleId = builder.sourceLocaleId;
-      this.targetLocaleId = builder.targetLocaleId;
+      this.targetLocaleIds = builder.targetLocaleIds;
       this.envId = builder.envId;
     }
   }
