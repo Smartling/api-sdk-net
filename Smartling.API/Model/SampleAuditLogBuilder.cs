@@ -1,4 +1,6 @@
-﻿namespace Smartling.Api.Model
+﻿using System.Collections.Generic;
+
+namespace Smartling.Api.Model
 {
   public class SampleAuditLogBuilder
   {
@@ -11,8 +13,7 @@
     public bool translationJobAutorize { get; set; }
     public string batchUid { get; set; }
     public string sourceLocaleId { get; set; }
-    public string targetLocaleId { get; set; }
-    public string targetLocaleIds { get; set; }
+    public List<string> targetLocaleIds { get; set; }
     public string description { get; set; }
     public string clientUserId { get; set; }
     public string clientUserEmail { get; set; }
@@ -58,7 +59,7 @@
 
     public SampleAuditLogBuilder WithTargetLocale(string targetLocaleId)
     {
-      this.targetLocaleId = targetLocaleId;
+      this.targetLocaleIds = new List<string>() { targetLocaleId };
       return this;
     }
 

@@ -50,7 +50,8 @@ namespace Smartling.ApiSample
       SampleAuditLog log = new SampleAuditLogBuilder("sandbox2", "UPLOAD", "testuser", itemId, "test_uri", "/sitecore/content")
         .WithJob("test_job", "aabbcc", "batch1")
         .WithSourceVersion(1)
-        .WithSourceLocale("en");
+        .WithSourceLocale("en")
+        .WithTargetLocale("ru-RU");
       
       client.Create(log);
 
