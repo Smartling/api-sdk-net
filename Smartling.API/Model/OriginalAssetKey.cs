@@ -2,6 +2,6 @@
 {
   public class OriginalAssetKey
   {
-    public string a { get; set; }
+    public string Key { get; set; }
   }
 }

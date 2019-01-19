@@ -7,7 +7,7 @@ namespace Smartling.Api.Model
     public string translationSubmissionUid { get; set; }
     public string translationRequestUid { get; set; }
     public TargetAssetKey targetAssetKey { get; set; }
-    public string customTranslationData { get; set; }
+    public CustomSubmissionData customTranslationData { get; set; }
     public string targetLocaleId { get; set; }
     public string state { get; set; }
     public string submitterName { get; set; }

@@ -57,13 +57,16 @@ namespace Smartling.ApiSample
     {
       var client = new SubmissionApiClient(auth, projectId, "test");
 
+      var itemId = Guid.NewGuid().ToString();
+
       // Create translation request
       var createTranslationRequest = new CreateTranslationRequest();
-      createTranslationRequest.contentHash = "qwerty" + Guid.NewGuid();
+      createTranslationRequest.contentHash = Guid.NewGuid().ToString().Substring(0, 32);
       createTranslationRequest.fileUri = Guid.NewGuid().ToString();
-      createTranslationRequest.originalAssetKey = new OriginalAssetKey();
+      createTranslationRequest.originalAssetKey = new OriginalAssetKey() { Key = itemId };
       createTranslationRequest.originalLocaleId = "en";
       createTranslationRequest.title = "test";
+      createTranslationRequest.customOriginalData = new CustomTranslationRequestData() { ItemId = itemId, Path = "content/home" };
 
       var request = client.CreateTranslationRequest(createTranslationRequest);
 
@@ -72,13 +75,10 @@ namespace Smartling.ApiSample
       submission.state = "In Progress";
       submission.submitterName = "test";
       submission.targetLocaleId = "ru-RU";
-      submission.targetAssetKey = new TargetAssetKey() { a = "test" + Guid.NewGuid() };
+      submission.targetAssetKey = new TargetAssetKey() { Key = Guid.NewGuid().ToString() };
+      submission.customTranslationData = new CustomSubmissionData() { Revision = Guid.NewGuid().ToString(), Locked = false, MediaContent = false };
 
-      var details = new CreateSubmissionDetails();
-      details.translationSubmissions = new List<CreateSubmissionRequest>() { submission };
-      details.translationRequestUid = request.translationRequestUid;
-
-      request = client.CreateDetails(details);
+      request = client.CreateSubmission(request.translationRequestUid, new List<CreateSubmissionRequest>() { submission });
 
       // Update submission
       var updateRequest = new UpdateTranslationRequest();
@@ -93,9 +93,9 @@ namespace Smartling.ApiSample
       var updatedRequest = client.UpdateTranslationRequest(updateRequest, request.translationRequestUid);
       
       // List translation requests
-      foreach (var s in client.Get(string.Empty))
+      foreach (var s in client.Get())
       {
-        Console.WriteLine(s.bucketName);
+        Console.WriteLine(s.translationRequestUid + " " + s.translationSubmissions.Count());
       }
     }
 

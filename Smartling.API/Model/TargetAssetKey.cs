@@ -2,6 +2,6 @@
 {
   public class TargetAssetKey
   {
-    public string a { get; set; }
+    public string Key { get; set; }
   }
 }

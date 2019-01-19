@@ -17,7 +17,7 @@ namespace Smartling.Api.Model
     public string originalLocale { get; set; }
     public bool outdated { get; set; }
     public DateTime localeLastModifiedDate { get; set; }
-    public string customOriginalData { get; set; }
+    public CustomTranslationRequestData customOriginalData { get; set; }
     public DateTime createdDate { get; set; }
     public DateTime modifiedDate { get; set; }
     public List<TranslationSubmission> translationSubmissions { get; set; }

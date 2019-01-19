@@ -38,6 +38,17 @@ namespace Smartling.Api.Job
       return JsonConvert.DeserializeObject<TranslationRequest>(response["response"]["data"].ToString());
     }
 
+    public virtual TranslationRequest CreateSubmission(string translationRequestUid, List<CreateSubmissionRequest> submissions)
+    {
+      var requestDetails = new CreateSubmissionDetails();
+      requestDetails.translationSubmissions = submissions;
+      requestDetails.translationRequestUid = translationRequestUid;
+
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(CreateSubmissionUrl, projectId, bucketName));
+      var response = ExecutePostRequest(uriBuilder, requestDetails, auth);
+      return JsonConvert.DeserializeObject<TranslationRequest>(response["response"]["data"].ToString());
+    }
+
     public virtual TranslationRequest UpdateTranslationRequest(UpdateTranslationRequest request, string translationRequestUid)
     {
       var uriBuilder = this.GetRequestStringBuilder(string.Format(UpdateSubmissionUrl, projectId, bucketName, translationRequestUid));
@@ -45,9 +56,9 @@ namespace Smartling.Api.Job
       return JsonConvert.DeserializeObject<TranslationRequest>(response["response"]["data"].ToString());
     }
     
-    public virtual List<TranslationRequest> Get(string fileUri)
+    public virtual List<TranslationRequest> Get()
     {
-      var page = GetPage(fileUri, PageSize, 0);
+      var page = GetPage(string.Empty, string.Empty, PageSize, 0);
       var results = new List<TranslationRequest>();
       var pageNumber = 0;
       results.AddRange(page.items);
@@ -55,25 +66,37 @@ namespace Smartling.Api.Job
       while (page.totalCount > results.Count && page.items.Count > 0)
       {
         pageNumber++;
-        page = GetPage(fileUri, PageSize, PageSize * pageNumber);
+        page = GetPage(string.Empty, string.Empty, PageSize, PageSize * pageNumber);
         results.AddRange(page.items);
       }
 
       return results;
     }
 
-    public virtual SubmissionItemList GetPage(string fileUri, int limit, int offset)
+    public virtual SubmissionItemList GetPage(string searchField, string searchValue, int limit, int offset)
     {
       StringBuilder uriBuilder;
       uriBuilder = this.GetRequestStringBuilder(string.Format(GetSubmissionsUrl, projectId, bucketName, limit, offset));
 
-      if (!string.IsNullOrEmpty(fileUri))
+      if (!string.IsNullOrEmpty(searchField) && !string.IsNullOrEmpty(searchValue))
       {
-        uriBuilder.Append("&fileUri=" + fileUri);
+        uriBuilder.Append($"&{searchField}={searchValue}");
       }
 
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
+
+      var settings = new JsonSerializerSettings
+      {
+        Error = (sender, args) =>
+        {
+          if (System.Diagnostics.Debugger.IsAttached)
+          {
+            System.Diagnostics.Debugger.Break();
+          }
+        }
+      };
+
       return JsonConvert.DeserializeObject<SubmissionItemList>(response["response"]["data"].ToString());
     }
   }
