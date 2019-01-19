@@ -10,6 +10,7 @@ namespace Smartling.Api.Job
   {
     private readonly string CreateJobUrl = "/jobs-api/v3/projects/{0}/jobs";
     private readonly string GetJobUrl = "/jobs-api/v3/projects/{0}/jobs?limit={1}&offset={2}";
+    private readonly string GetJobByIdUrl = "/jobs-api/v3/projects/{0}/jobs/{1}";
     private readonly string GetJobByNameUrl = "/jobs-api/v3/projects/{0}/jobs?jobName={1}&limit={2}&offset={3}";
     private readonly string UpdateJobUrl = "/jobs-api/v3/projects/{0}/jobs/{1}";
     private readonly string JobFileUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/file/add";
@@ -38,6 +39,14 @@ namespace Smartling.Api.Job
     {
       var uriBuilder = this.GetRequestStringBuilder(string.Format(UpdateJobUrl, projectId, jobId));
       var response = ExecutePutRequest(uriBuilder, job, auth);
+      return JsonConvert.DeserializeObject<Model.Job>(response["response"]["data"].ToString());
+    }
+
+    public virtual Model.Job GetById(string translationJobUid)
+    {
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(GetJobByIdUrl, projectId, translationJobUid));     
+      var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
+      var response = ExecuteGetRequest(request, uriBuilder, auth);
       return JsonConvert.DeserializeObject<Model.Job>(response["response"]["data"].ToString());
     }
 

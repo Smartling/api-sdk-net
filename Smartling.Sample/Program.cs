@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using System.Linq;
 using Smartling.Api.Authentication;
 using Smartling.Api.Batch;
@@ -6,11 +7,10 @@ using Smartling.Api.File;
 using Smartling.Api.Job;
 using Smartling.Api.Model;
 using Smartling.Api.Project;
+using System.Threading;
 
 namespace Smartling.ApiSample
 {
-  using System;
-  
   internal class Program
   {
     private static string userIdentifier;
@@ -28,8 +28,9 @@ namespace Smartling.ApiSample
       string fileUri = "ApiSample_" + Guid.NewGuid();
 
       Submissions(auth);
-      Published(auth);
+      Audit(auth);
       Jobs(auth);
+      Published(auth);
       GetProjectData(projectApiClient);
       Upload(fileApiClient, fileUri, "xml");
       List(fileApiClient);
@@ -41,6 +42,29 @@ namespace Smartling.ApiSample
 
       Console.WriteLine("All done, press any key to exit");
       Console.ReadKey();
+    }
+
+    private static void Audit(OAuthAuthenticationStrategy auth)
+    {
+      var client = new AuditApiClient<SampleAuditLog>(auth, projectId);
+      var itemId = Guid.NewGuid().ToString();
+      SampleAuditLog log = new SampleAuditLogBuilder("sandbox2", "UPLOAD", "testuser", itemId, "test_uri", "/sitecore/content")
+        .WithJob("test_job", "aabbcc", "batch1")
+        .WithSourceVersion(1)
+        .WithSourceLocale("en")
+        .WithTargetLocale("ru-RU");
+      
+      client.Create(log);
+
+      // Wait for audit log to be created and processed
+      Thread.Sleep(1000);
+
+      var query = new Dictionary<string, string>();
+      query.Add("clientData.ItemId|clientData.Path", itemId);
+      query.Add("sourceLocaleId", "en|ru");
+      query.Add("envId", "sandbox2");
+
+      var logs = client.Get(query, "_id:desc");
     }
 
     private static void Published(OAuthAuthenticationStrategy auth)
@@ -111,21 +135,23 @@ namespace Smartling.ApiSample
       var jobRequest = new CreateJob();
       jobRequest.jobName = "ApiSample_Job_" + Guid.NewGuid();
       jobRequest.description = "test";
-      jobRequest.dueDate = "2018-11-21T11:51:17Z";
+      jobRequest.dueDate = DateTime.Now.AddMonths(1).ToString("yyyy-MM-ddTHH:mm:ssZ");
       jobRequest.targetLocaleIds = new List<string>() {"ru-RU"};
       jobRequest.callbackUrl = "https://www.callback.com/smartling/job";
       jobRequest.callbackMethod = "GET";
       jobRequest.referenceNumber = "test";
 
-      jobApiClient.Create(jobRequest);
+      var createdJob = jobApiClient.Create(jobRequest);
+      createdJob = jobApiClient.GetById(createdJob.translationJobUid);
+
       var jobs = jobApiClient.Get();
       var processes = jobApiClient.GetProcesses(jobs.First().translationJobUid);
 
       var updateJob = new UpdateJob();
       updateJob.jobName = jobRequest.jobName;
       updateJob.description = "test2";
-      updateJob.dueDate = "2018-11-21T11:51:17Z";
-      jobApiClient.Update(updateJob, jobs.First().translationJobUid);
+      updateJob.dueDate = DateTime.Now.AddMonths(1).ToString("yyyy-MM-ddTHH:mm:ssZ");
+      var updatedJob = jobApiClient.Update(updateJob, jobs.First().translationJobUid);
       jobs = jobApiClient.Get();
       jobApiClient.AddLocale("nl-NL", jobs.First().translationJobUid);
 
