@@ -25,7 +25,7 @@ namespace Smartling.ApiSample
       var fileApiClient = new FileApiClient(auth, projectId, string.Empty);
       var projectApiClient = new ProjectApiClient(auth, projectId);
       fileApiClient.ApiGatewayUrl = "https://api.smartling.com";
-      string fileUri = "ApiSample_" + Guid.NewGuid();
+      string fileUri = "ApiSample & and=$ complex\"$ name%_" + Guid.NewGuid();
 
       Audit(auth);
       Jobs(auth);
@@ -36,7 +36,7 @@ namespace Smartling.ApiSample
       Status(fileApiClient, fileUri, "ru-RU");
       Download(fileApiClient, fileUri);
       LastModified(fileApiClient, fileUri);
-      Authorization(fileApiClient);
+      Authorization(fileApiClient, fileUri);
       Deletion(fileApiClient, fileUri);
 
       Console.WriteLine("All done, press any key to exit");
@@ -140,10 +140,10 @@ namespace Smartling.ApiSample
       fileClient.DeleteFile(fileUri);
     }
 
-    private static void Authorization(FileApiClient fileClient)
+    private static void Authorization(FileApiClient fileClient, string fileUri)
     {
-      fileClient.Authorize("Sample.xml", "de-DE,fr-FR");
-      fileClient.Unauthorize("Sample.xml", "fr-FR");
+      fileClient.Authorize(fileUri, "de-DE,fr-FR");
+      fileClient.Unauthorize(fileUri, "fr-FR");
     }
 
     private static void LastModified(FileApiClient fileClient, string fileUri)

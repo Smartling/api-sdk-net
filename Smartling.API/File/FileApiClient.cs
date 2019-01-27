@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Text;
@@ -13,7 +14,7 @@ namespace Smartling.Api.File
 {
   public class FileApiClient : ApiClientBase
   {
-    private readonly string UploadUrl = "/files-api/v2/projects/{0}/file";
+    private const string UploadUrl = "/files-api/v2/projects/{0}/file";
     private const string GetUrl = "/files-api/v2/projects/{0}/locales/{1}/file";
     private const string ListUrl = "/files-api/v2/projects/{0}/files/list";
     private const string StatusUrl = "/files-api/v2/projects/{0}/file/status";
@@ -38,7 +39,6 @@ namespace Smartling.Api.File
     public FileApiClient(IAuthenticationStrategy auth, string projectId, string callbackUrl)
     {
       this.auth = auth;
-      this.UploadUrl = string.Format(this.UploadUrl, projectId);
       this.projectId = projectId;
       this.callbackUrl = callbackUrl;
     }
@@ -70,7 +70,7 @@ namespace Smartling.Api.File
 
     public virtual FileUploadResult UploadFileStream(Stream fileStream, string fileUri, string fileType, string approvedLocales, bool authorizeContent)
     {
-      var uriBuilder = this.GetRequestStringBuilder(UploadUrl);
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(UploadUrl, Uri.EscapeDataString(projectId)));
       var formData = new NameValueCollection();
       formData.Add(FileUriParameterName, fileUri);
       formData.Add(FileTypeParameterName, fileType);
@@ -107,8 +107,8 @@ namespace Smartling.Api.File
 
     public virtual string GetFile(string fileUri, string locale, string retrievalType)
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(GetUrl, projectId, locale))
-        .AppendFormat("?{0}={1}", FileUriParameterName, fileUri)
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(GetUrl, Uri.EscapeDataString(projectId), Uri.EscapeDataString(locale)))
+        .AppendFormat("?{0}={1}", FileUriParameterName, Uri.EscapeDataString(fileUri))
         .AppendFormat("&{0}={1}", RetrievalTypeParameterName, retrievalType);
       
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
@@ -125,7 +125,7 @@ namespace Smartling.Api.File
 
     public virtual IEnumerable<FileStatus> GetFilesList()
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(ListUrl, projectId));
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(ListUrl, Uri.EscapeDataString(projectId)));
 
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
@@ -135,8 +135,8 @@ namespace Smartling.Api.File
     
     public virtual FileStatus GetFileStatus(string fileUri)
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(StatusUrl, projectId))
-        .AppendFormat("?{0}={1}", FileUriParameterName, fileUri);
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(StatusUrl, Uri.EscapeDataString(projectId)))
+        .AppendFormat("?{0}={1}", FileUriParameterName, Uri.EscapeDataString(fileUri));
 
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
@@ -154,8 +154,8 @@ namespace Smartling.Api.File
 
     public virtual FileStatusDetail GetFileStatus(string fileUri, string locale)
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(StatusDetailUrl, projectId, locale))
-        .AppendFormat("?{0}={1}", FileUriParameterName, fileUri);
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(StatusDetailUrl, Uri.EscapeDataString(projectId), Uri.EscapeDataString(locale)))
+        .AppendFormat("?{0}={1}", FileUriParameterName, Uri.EscapeDataString(fileUri));
       
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
@@ -166,8 +166,8 @@ namespace Smartling.Api.File
     
     public virtual LastModified GetLastModified(string fileUri)
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(LastModifiedUrl, projectId))
-        .AppendFormat("?{0}={1}", FileUriParameterName, fileUri);
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(LastModifiedUrl, Uri.EscapeDataString(projectId)))
+        .AppendFormat("?{0}={1}", FileUriParameterName, Uri.EscapeDataString(fileUri));
 
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
@@ -176,8 +176,8 @@ namespace Smartling.Api.File
 
     public virtual LastModifiedDetail GetLastModified(string fileUri, string locale)
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(LastModifiedDetailUrl, projectId, locale))
-        .AppendFormat("?{0}={1}", FileUriParameterName, fileUri);
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(LastModifiedDetailUrl, Uri.EscapeDataString(projectId), Uri.EscapeDataString(locale)))
+        .AppendFormat("?{0}={1}", FileUriParameterName, Uri.EscapeDataString(fileUri));
 
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
@@ -186,8 +186,8 @@ namespace Smartling.Api.File
 
     public virtual void Authorize(string fileUri, string approvedLocales)
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(ContentAuthorizationUrl, projectId))
-        .AppendFormat("?{0}={1}", FileUriParameterName, fileUri)
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(ContentAuthorizationUrl, Uri.EscapeDataString(projectId)))
+        .AppendFormat("?{0}={1}", FileUriParameterName, Uri.EscapeDataString(fileUri))
         .AppendFormat("&{0}={1}", LocaleIdsParameterName, approvedLocales);
       
       var request = PreparePutRequest(uriBuilder.ToString(), auth.GetToken());
@@ -196,8 +196,8 @@ namespace Smartling.Api.File
 
     public virtual void Unauthorize(string fileUri, string removedLocales)
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(ContentAuthorizationUrl, projectId))
-        .AppendFormat("?{0}={1}", FileUriParameterName, fileUri)
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(ContentAuthorizationUrl, Uri.EscapeDataString(projectId)))
+        .AppendFormat("?{0}={1}", FileUriParameterName, Uri.EscapeDataString(fileUri))
         .AppendFormat("&{0}={1}", LocaleIdsParameterName, removedLocales);
 
       var request = PrepareDeleteRequest(uriBuilder.ToString(), auth.GetToken());
@@ -206,8 +206,8 @@ namespace Smartling.Api.File
 
     public virtual void DeleteFile(string fileUri)
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(DeleteUrl, projectId))
-        .AppendFormat("?{0}={1}", FileUriParameterName, fileUri);
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(DeleteUrl, Uri.EscapeDataString(projectId)))
+        .AppendFormat("?{0}={1}", FileUriParameterName, Uri.EscapeDataString(fileUri));
 
       var request = PrepareDeleteRequest(uriBuilder.ToString(), auth.GetToken());
       ExecuteGetRequest(request, uriBuilder, auth);
@@ -215,8 +215,8 @@ namespace Smartling.Api.File
 
     public virtual Stream GetFileStream(string fileUri, string locale)
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(GetUrl, projectId, locale))
-        .AppendFormat("?{0}={1}", FileUriParameterName, fileUri);
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(GetUrl, Uri.EscapeDataString(projectId), Uri.EscapeDataString(locale)))
+        .AppendFormat("?{0}={1}", FileUriParameterName, Uri.EscapeDataString(fileUri));
 
       return GetResponseStream(PrepareGetRequest(uriBuilder.ToString(), auth.GetToken()));
     }
