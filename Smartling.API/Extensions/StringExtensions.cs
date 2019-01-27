@@ -1,4 +1,6 @@
 ﻿using Smartling.Api.Model;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -37,6 +39,22 @@ namespace Smartling.Api.Extensions
       }
 
       return sb.ToString();
+    }
+
+    public static string FormatUri(this string value, params string[] args)
+    {
+      var escapedArgs = new List<object>();
+      foreach(var arg in args)
+      {
+        escapedArgs.Add(Uri.EscapeDataString(arg.ToString()));
+      }
+
+      return string.Format(value, escapedArgs.ToArray());
+    }
+
+    public static StringBuilder AppendUri(this StringBuilder builder, string format, string key, string value)
+    {
+      return builder.AppendFormat(format, key, Uri.EscapeDataString(value.ToString()));
     }
   }
 }
