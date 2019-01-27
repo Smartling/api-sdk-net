@@ -219,5 +219,22 @@ namespace Smartling.ApiTests
       // Assert
       Assert.AreEqual(lastModified.lastModified, DateTime.Parse("2000-01-01T01:01:01Z").ToUniversalTime());
     }
+
+    [TestMethod]
+    public void ShouldEscapeParametersInLastModified()
+    {
+      // Arrange
+      var auth = GetAuth();
+      var client = new Mock<FileApiClient>(auth, "<test&project>", "test");
+      client.CallBase = true;
+      client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(LastModifiedResponse);
+ 
+      // Act
+      var file = client.Object.GetLastModified("D & G.xml");
+
+      // Assert
+      client.Verify(x => x.PrepareGetRequest(It.Is<string>(r => r.Contains("D%20%26%20G.xml")), It.IsAny<string>()));
+      client.Verify(x => x.PrepareGetRequest(It.Is<string>(r => r.Contains("%3Ctest%26project%3E")), It.IsAny<string>()));
+    }
   }
 }
