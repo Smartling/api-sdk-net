@@ -25,8 +25,9 @@ namespace Smartling.ApiSample
       var fileApiClient = new FileApiClient(auth, projectId, string.Empty);
       var projectApiClient = new ProjectApiClient(auth, projectId);
       fileApiClient.ApiGatewayUrl = "https://api.smartling.com";
-      string fileUri = "ApiSample & and=$ complex\"$ name%_" + Guid.NewGuid();
+      string fileUri = "ApiSample_" + Guid.NewGuid();
 
+      Submissions(auth);
       Audit(auth);
       Jobs(auth);
       Published(auth);
@@ -36,7 +37,7 @@ namespace Smartling.ApiSample
       Status(fileApiClient, fileUri, "ru-RU");
       Download(fileApiClient, fileUri);
       LastModified(fileApiClient, fileUri);
-      Authorization(fileApiClient, fileUri);
+      Authorization(fileApiClient);
       Deletion(fileApiClient, fileUri);
 
       Console.WriteLine("All done, press any key to exit");
@@ -73,6 +74,52 @@ namespace Smartling.ApiSample
       foreach (var item in publishedClient.GetRecentlyPublished())
       {
         Console.WriteLine(item.fileUri + " " + item.localeId + " " + item.publishDate);
+      }
+    }
+    
+    private static void Submissions(OAuthAuthenticationStrategy auth)
+    {
+      var client = new SubmissionApiClient(auth, projectId, "test");
+
+      var itemId = Guid.NewGuid().ToString();
+
+      // Create translation request
+      var createTranslationRequest = new CreateTranslationRequest();
+      createTranslationRequest.contentHash = Guid.NewGuid().ToString().Substring(0, 32);
+      createTranslationRequest.fileUri = Guid.NewGuid().ToString();
+      createTranslationRequest.originalAssetKey = new OriginalAssetKey() { Key = itemId };
+      createTranslationRequest.originalLocaleId = "en";
+      createTranslationRequest.title = "test";
+      createTranslationRequest.customOriginalData = new CustomTranslationRequestData() { ItemId = itemId, Path = "content/home" };
+
+      var request = client.CreateTranslationRequest(createTranslationRequest);
+
+      // Create subsmission
+      var submission = new CreateSubmissionRequest();
+      submission.state = "In Progress";
+      submission.submitterName = "test";
+      submission.targetLocaleId = "ru-RU";
+      submission.targetAssetKey = new TargetAssetKey() { Key = Guid.NewGuid().ToString() };
+      submission.customTranslationData = new CustomSubmissionData() { Revision = Guid.NewGuid().ToString(), Locked = false, MediaContent = false };
+
+      request = client.CreateSubmission(request.translationRequestUid, new List<CreateSubmissionRequest>() { submission });
+
+      // Update submission
+      var updateRequest = new UpdateTranslationRequest();
+      updateRequest.translationSubmissions = new List<UpdateSubmissionRequest> {new UpdateSubmissionRequest {
+        translationSubmissionUid = request.translationSubmissions[0].translationSubmissionUid,
+        submitterName = "test2",
+        state = "In Progress",
+        percentComplete = 0,
+        targetAssetKey =  request.translationSubmissions[0].targetAssetKey
+      }  };
+
+      var updatedRequest = client.UpdateTranslationRequest(updateRequest, request.translationRequestUid);
+      
+      // List translation requests
+      foreach (var s in client.Get())
+      {
+        Console.WriteLine(s.translationRequestUid + " " + s.translationSubmissions.Count());
       }
     }
 
@@ -140,10 +187,10 @@ namespace Smartling.ApiSample
       fileClient.DeleteFile(fileUri);
     }
 
-    private static void Authorization(FileApiClient fileClient, string fileUri)
+    private static void Authorization(FileApiClient fileClient)
     {
-      fileClient.Authorize(fileUri, "de-DE,fr-FR");
-      fileClient.Unauthorize(fileUri, "fr-FR");
+      fileClient.Authorize("Sample.xml", "de-DE,fr-FR");
+      fileClient.Unauthorize("Sample.xml", "fr-FR");
     }
 
     private static void LastModified(FileApiClient fileClient, string fileUri)
@@ -252,3 +299,4 @@ namespace Smartling.ApiSample
     }
   }
 }
+
