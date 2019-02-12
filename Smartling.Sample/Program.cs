@@ -84,7 +84,7 @@ namespace Smartling.ApiSample
       var itemId = Guid.NewGuid().ToString();
 
       // Create translation request
-      var createTranslationRequest = new CreateTranslationRequest();
+      var createTranslationRequest = new CreateTranslationRequest<SampleCustomTranslationRequestData>();
       createTranslationRequest.contentHash = Guid.NewGuid().ToString().Substring(0, 32);
       createTranslationRequest.fileUri = Guid.NewGuid().ToString();
       createTranslationRequest.originalAssetKey = new OriginalAssetKey() { Key = itemId };

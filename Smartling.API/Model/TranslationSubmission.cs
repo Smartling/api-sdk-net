@@ -12,8 +12,8 @@ namespace Smartling.Api.Model
     public string state { get; set; }
     public string submitterName { get; set; }
     public int percentComplete { get; set; }
-    public object lastExportedDate { get; set; }
-    public object lastErrorMessage { get; set; }
+    public DateTime? lastExportedDate { get; set; }
+    public string lastErrorMessage { get; set; }
     public DateTime createdDate { get; set; }
     public DateTime modifiedDate { get; set; }
   }

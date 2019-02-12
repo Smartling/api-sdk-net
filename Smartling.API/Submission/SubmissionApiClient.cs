@@ -24,7 +24,7 @@ namespace Smartling.Api.Job
       this.bucketName = bucketName;
     }
 
-    public virtual TranslationRequest<TCustomRequest, TCustomSubmission> CreateTranslationRequest(CreateTranslationRequest submission)
+    public virtual TranslationRequest<TCustomRequest, TCustomSubmission> CreateTranslationRequest(CreateTranslationRequest<TCustomRequest> submission)
     {
       var uriBuilder = this.GetRequestStringBuilder(string.Format(CreateSubmissionUrl, projectId, bucketName));
       var response = ExecutePostRequest(uriBuilder, submission, auth);
