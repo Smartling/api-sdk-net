@@ -2,7 +2,7 @@
 
 namespace Smartling.Api.Model
 {
-  public class CustomTranslationRequestData
+  public class SampleCustomTranslationRequestData
   {
     public string ItemId { get; set; }
     public string Path { get; set; }

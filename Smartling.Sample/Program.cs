@@ -79,7 +79,7 @@ namespace Smartling.ApiSample
     
     private static void Submissions(OAuthAuthenticationStrategy auth)
     {
-      var client = new SubmissionApiClient(auth, projectId, "test");
+      var client = new SubmissionApiClient<SampleCustomTranslationRequestData, SampleCustomSubmissionData>(auth, projectId, "test");
 
       var itemId = Guid.NewGuid().ToString();
 
@@ -90,28 +90,27 @@ namespace Smartling.ApiSample
       createTranslationRequest.originalAssetKey = new OriginalAssetKey() { Key = itemId };
       createTranslationRequest.originalLocaleId = "en";
       createTranslationRequest.title = "test";
-      createTranslationRequest.customOriginalData = new CustomTranslationRequestData() { ItemId = itemId, Path = "content/home" };
+      createTranslationRequest.customOriginalData = new SampleCustomTranslationRequestData() { ItemId = itemId, Path = "content/home" };
 
       var request = client.CreateTranslationRequest(createTranslationRequest);
 
+      var searchResult = client.GetPage("originalAssetKey.Key", itemId, 100, 0);
+
       // Create subsmission
       var submission = new CreateSubmissionRequest();
-      submission.state = "In Progress";
+      submission.state = "New";
       submission.submitterName = "test";
       submission.targetLocaleId = "ru-RU";
       submission.targetAssetKey = new TargetAssetKey() { Key = Guid.NewGuid().ToString() };
-      submission.customTranslationData = new CustomSubmissionData() { Revision = Guid.NewGuid().ToString(), Locked = false, MediaContent = false };
+      submission.customTranslationData = new SampleCustomSubmissionData() { Revision = Guid.NewGuid().ToString(), Locked = false, MediaContent = false };
 
       request = client.CreateSubmission(request.translationRequestUid, new List<CreateSubmissionRequest>() { submission });
 
       // Update submission
-      var updateRequest = new UpdateTranslationRequest();
-      updateRequest.translationSubmissions = new List<UpdateSubmissionRequest> {new UpdateSubmissionRequest {
+      var updateRequest = new UpdateTranslationRequest<SampleCustomSubmissionData>();
+      updateRequest.translationSubmissions = new List<UpdateSubmissionRequest<SampleCustomSubmissionData>> {new UpdateSubmissionRequest<SampleCustomSubmissionData> {
         translationSubmissionUid = request.translationSubmissions[0].translationSubmissionUid,
-        submitterName = "test2",
         state = "In Progress",
-        percentComplete = 0,
-        targetAssetKey =  request.translationSubmissions[0].targetAssetKey
       }  };
 
       var updatedRequest = client.UpdateTranslationRequest(updateRequest, request.translationRequestUid);
@@ -119,7 +118,7 @@ namespace Smartling.ApiSample
       // List translation requests
       foreach (var s in client.Get())
       {
-        Console.WriteLine(s.translationRequestUid + " " + s.translationSubmissions.Count());
+        Console.WriteLine(s.translationRequestUid + " " + s.translationSubmissions.Count() + " " + s.fileUri);
       }
     }
 

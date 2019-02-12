@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Smartling.Api.Model
 {
-  public class TranslationRequest
+  public class TranslationRequest<TCustomRequest, TCustomSubmission>
   {
     public string translationRequestUid { get; set; }
     public string projectId { get; set; }
@@ -17,9 +17,9 @@ namespace Smartling.Api.Model
     public string originalLocale { get; set; }
     public bool outdated { get; set; }
     public DateTime localeLastModifiedDate { get; set; }
-    public CustomTranslationRequestData customOriginalData { get; set; }
+    public TCustomRequest customOriginalData { get; set; }
     public DateTime createdDate { get; set; }
     public DateTime modifiedDate { get; set; }
-    public List<TranslationSubmission> translationSubmissions { get; set; }
+    public List<TranslationSubmission<TCustomSubmission>> translationSubmissions { get; set; }
   }
 }

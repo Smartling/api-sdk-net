@@ -2,7 +2,7 @@
 
 namespace Smartling.Api.Model
 {
-  public class CustomSubmissionData
+  public class SampleCustomSubmissionData
   {
     public string Revision { get; set; }
     public bool MediaContent { get; set; }
