@@ -2,9 +2,9 @@
 
 namespace Smartling.Api.Model
 {
-  public class CreateSubmissionDetails
+  public class CreateSubmissionDetails<T>
   {
     public string translationRequestUid { get; set; }
-    public List<CreateSubmissionRequest> translationSubmissions { get; set; }
+    public List<CreateSubmissionRequest<T>> translationSubmissions { get; set; }
   }
 }

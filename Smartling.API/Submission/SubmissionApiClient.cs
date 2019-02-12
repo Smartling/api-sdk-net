@@ -31,16 +31,16 @@ namespace Smartling.Api.Job
       return JsonConvert.DeserializeObject<TranslationRequest<TCustomRequest, TCustomSubmission>>(response["response"]["data"].ToString());
     }
 
-    public virtual TranslationRequest<TCustomRequest, TCustomSubmission> CreateDetails(CreateSubmissionDetails submission)
+    public virtual TranslationRequest<TCustomRequest, TCustomSubmission> CreateDetails(CreateSubmissionDetails<TCustomSubmission> submission)
     {
       var uriBuilder = this.GetRequestStringBuilder(string.Format(CreateSubmissionUrl, projectId, bucketName));
       var response = ExecutePostRequest(uriBuilder, submission, auth);
       return JsonConvert.DeserializeObject<TranslationRequest<TCustomRequest, TCustomSubmission>>(response["response"]["data"].ToString());
     }
 
-    public virtual TranslationRequest<TCustomRequest, TCustomSubmission> CreateSubmission(string translationRequestUid, List<CreateSubmissionRequest> submissions)
+    public virtual TranslationRequest<TCustomRequest, TCustomSubmission> CreateSubmission(string translationRequestUid, List<CreateSubmissionRequest<TCustomSubmission>> submissions)
     {
-      var requestDetails = new CreateSubmissionDetails();
+      var requestDetails = new CreateSubmissionDetails<TCustomSubmission>();
       requestDetails.translationSubmissions = submissions;
       requestDetails.translationRequestUid = translationRequestUid;
 

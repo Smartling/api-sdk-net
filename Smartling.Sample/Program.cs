@@ -97,14 +97,14 @@ namespace Smartling.ApiSample
       var searchResult = client.GetPage("originalAssetKey.Key", itemId, 100, 0);
 
       // Create subsmission
-      var submission = new CreateSubmissionRequest();
+      var submission = new CreateSubmissionRequest<SampleCustomSubmissionData>();
       submission.state = "New";
       submission.submitterName = "test";
       submission.targetLocaleId = "ru-RU";
       submission.targetAssetKey = new TargetAssetKey() { Key = Guid.NewGuid().ToString() };
       submission.customTranslationData = new SampleCustomSubmissionData() { Revision = Guid.NewGuid().ToString(), Locked = false, MediaContent = false };
 
-      request = client.CreateSubmission(request.translationRequestUid, new List<CreateSubmissionRequest>() { submission });
+      request = client.CreateSubmission(request.translationRequestUid, new List<CreateSubmissionRequest<SampleCustomSubmissionData>>() { submission });
 
       // Update submission
       var updateRequest = new UpdateTranslationRequest<SampleCustomSubmissionData>();
