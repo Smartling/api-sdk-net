@@ -29,7 +29,7 @@ namespace Smartling.Api.Model
     public DateTime lastExportedDate { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public object lastErrorMessage { get; set; }
+    public string lastErrorMessage { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public DateTime modifiedDate { get; set; }
