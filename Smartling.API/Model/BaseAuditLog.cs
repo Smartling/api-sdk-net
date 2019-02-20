@@ -40,7 +40,7 @@ namespace Smartling.Api.Model
     public string translationJobUid { get; set; }
     public string translationJobName { get; set; }
     public string translationJobDueDate { get; set; }
-    public bool translationJobAutorize { get; set; }
+    public bool translationJobAuthorize { get; set; }
     public string batchUid { get; set; }
     public string sourceLocaleId { get; set; }
     public List<string> targetLocaleIds { get; set; }
