@@ -107,7 +107,7 @@ namespace Smartling.Api.Job
 
       return JsonConvert.DeserializeObject<SubmissionItemList<TCustomRequest, TCustomSubmission>>(response["response"]["data"].ToString());
     }
-    
+
     private static void BuildSearchQuery(Dictionary<string, string> query, StringBuilder uriBuilder)
     {
       uriBuilder.Append("&");
@@ -115,12 +115,9 @@ namespace Smartling.Api.Job
       foreach (var key in query.Keys)
       {
         var fieldClauses = new List<string>();
-        foreach (var field in key)
+        foreach (var val in query[key].Split('|'))
         {
-          foreach (var val in query[key].EscapeSearchQuery().Split('|'))
-          {
-            fieldClauses.Add($"&{field}={val}");
-          }
+          fieldClauses.Add(key + "=" + System.Net.WebUtility.UrlEncode(val));
         }
 
         clauses.Add(string.Join("&", fieldClauses.ToArray()));
