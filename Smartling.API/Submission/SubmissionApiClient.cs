@@ -57,9 +57,9 @@ namespace Smartling.Api.Job
       return JsonConvert.DeserializeObject<TranslationRequest<TCustomRequest, TCustomSubmission>>(response["response"]["data"].ToString());
     }
     
-    public virtual List<TranslationRequest<TCustomRequest, TCustomSubmission>> Get()
+    public virtual List<TranslationRequest<TCustomRequest, TCustomSubmission>> Get(string searchField, string searchValue)
     {
-      var page = GetPage(null, PageSize, 0);
+      var page = GetPage(searchField, searchValue, PageSize, 0);
       var results = new List<TranslationRequest<TCustomRequest, TCustomSubmission>>();
       var pageNumber = 0;
       results.AddRange(page.items);
@@ -123,7 +123,7 @@ namespace Smartling.Api.Job
         clauses.Add(string.Join("&", fieldClauses.ToArray()));
       }
 
-      uriBuilder.Append(string.Join(string.Empty, clauses.ToArray()));
+      uriBuilder.Append(string.Join("&", clauses.ToArray()));
     }
   }
 }

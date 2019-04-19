@@ -84,7 +84,7 @@ namespace Smartling.ApiSample
       var itemId = Guid.NewGuid().ToString();
 
       // List translation requests
-      foreach (var s in client.Get())
+      foreach (var s in client.Get("state", "In Progress"))
       {
         Console.WriteLine(s.translationRequestUid + " " + s.translationSubmissions.Count() + " " + s.fileUri);
         foreach(var sub in s.translationSubmissions)
@@ -110,6 +110,7 @@ namespace Smartling.ApiSample
 
       var query = new Dictionary<string, string>();
       query.Add("state", "New|In Progress");
+      query.Add("customTranslationData.MediaContent", "true");
       searchResult = client.GetPage(query, 100, 0);
 
       // Create subsmission
@@ -133,7 +134,7 @@ namespace Smartling.ApiSample
       var updatedRequest = client.UpdateTranslationRequest(updateRequest, request.translationRequestUid);
 
       // List translation requests
-      foreach (var s in client.Get())
+      foreach (var s in client.Get("state", "In Progress"))
       {
         Console.WriteLine(s.translationRequestUid + " " + s.translationSubmissions.Count() + " " + s.fileUri);
       }
