@@ -2,6 +2,7 @@
 using System.Text;
 using Newtonsoft.Json;
 using Smartling.Api.Authentication;
+using Smartling.Api.Extensions;
 using Smartling.Api.Model;
 
 namespace Smartling.Api.Job
@@ -58,7 +59,7 @@ namespace Smartling.Api.Job
     
     public virtual List<TranslationRequest<TCustomRequest, TCustomSubmission>> Get()
     {
-      var page = GetPage(string.Empty, string.Empty, PageSize, 0);
+      var page = GetPage(null, PageSize, 0);
       var results = new List<TranslationRequest<TCustomRequest, TCustomSubmission>>();
       var pageNumber = 0;
       results.AddRange(page.items);
@@ -66,7 +67,7 @@ namespace Smartling.Api.Job
       while (page.totalCount > results.Count && page.items.Count > 0)
       {
         pageNumber++;
-        page = GetPage(string.Empty, string.Empty, PageSize, PageSize * pageNumber);
+        page = GetPage(null, PageSize, PageSize * pageNumber);
         results.AddRange(page.items);
       }
 
@@ -75,14 +76,21 @@ namespace Smartling.Api.Job
 
     public virtual SubmissionItemList<TCustomRequest, TCustomSubmission> GetPage(string searchField, string searchValue, int limit, int offset)
     {
+      var query = new Dictionary<string, string>();
+      query.Add(searchField, searchValue);
+      return GetPage(query, limit, offset);
+    }
+
+    public virtual SubmissionItemList<TCustomRequest, TCustomSubmission> GetPage(Dictionary<string, string> query, int limit, int offset)
+    {
       StringBuilder uriBuilder;
       uriBuilder = this.GetRequestStringBuilder(string.Format(GetSubmissionsUrl, projectId, bucketName, limit, offset));
 
-      if (!string.IsNullOrEmpty(searchField) && !string.IsNullOrEmpty(searchValue))
+      if(query != null && query.Keys.Count > 0)
       {
-        uriBuilder.Append($"&{searchField}={searchValue}");
+        BuildSearchQuery(query, uriBuilder);
       }
-
+      
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
 
@@ -98,6 +106,27 @@ namespace Smartling.Api.Job
       };
 
       return JsonConvert.DeserializeObject<SubmissionItemList<TCustomRequest, TCustomSubmission>>(response["response"]["data"].ToString());
+    }
+    
+    private static void BuildSearchQuery(Dictionary<string, string> query, StringBuilder uriBuilder)
+    {
+      uriBuilder.Append("&");
+      var clauses = new List<string>();
+      foreach (var key in query.Keys)
+      {
+        var fieldClauses = new List<string>();
+        foreach (var field in key)
+        {
+          foreach (var val in query[key].EscapeSearchQuery().Split('|'))
+          {
+            fieldClauses.Add($"&{field}={val}");
+          }
+        }
+
+        clauses.Add(string.Join("&", fieldClauses.ToArray()));
+      }
+
+      uriBuilder.Append(string.Join(string.Empty, clauses.ToArray()));
     }
   }
 }

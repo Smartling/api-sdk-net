@@ -24,7 +24,7 @@ namespace Smartling.Api.Model
 
     public override bool CanConvert(Type objectType)
     {
-      return objectType == typeof(DateTime);
+      return objectType == typeof(DateTime) || objectType == typeof(DateTime?);
     }
   }
 }
