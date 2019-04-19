@@ -79,9 +79,19 @@ namespace Smartling.ApiSample
     
     private static void Submissions(OAuthAuthenticationStrategy auth)
     {
-      var client = new SubmissionApiClient<SampleCustomTranslationRequestData, SampleCustomSubmissionData>(auth, projectId, "test");
+      var client = new SubmissionApiClient<SampleCustomTranslationRequestData, SampleCustomSubmissionData>(auth, projectId, "1e65ee5c-2555-4fd4-8305-56228ee3a0dd");
 
       var itemId = Guid.NewGuid().ToString();
+
+      // List translation requests
+      foreach (var s in client.Get())
+      {
+        Console.WriteLine(s.translationRequestUid + " " + s.translationSubmissions.Count() + " " + s.fileUri);
+        foreach(var sub in s.translationSubmissions)
+        {
+          Console.WriteLine("  " + sub.state + sub.targetLocaleId);
+        }
+      }
 
       // Create translation request
       var createTranslationRequest = new CreateTranslationRequest<SampleCustomTranslationRequestData>();
@@ -94,7 +104,13 @@ namespace Smartling.ApiSample
 
       var request = client.CreateTranslationRequest(createTranslationRequest);
 
+      // Search submissions
       var searchResult = client.GetPage("originalAssetKey.Key", itemId, 100, 0);
+      searchResult = client.GetPage("state", "In Progress", 100, 0);
+
+      var query = new Dictionary<string, string>();
+      query.Add("state", "New|In Progress");
+      searchResult = client.GetPage(query, 100, 0);
 
       // Create subsmission
       var submission = new CreateSubmissionRequest<SampleCustomSubmissionData>();
@@ -111,10 +127,11 @@ namespace Smartling.ApiSample
       updateRequest.translationSubmissions = new List<UpdateSubmissionRequest<SampleCustomSubmissionData>> {new UpdateSubmissionRequest<SampleCustomSubmissionData> {
         translationSubmissionUid = request.translationSubmissions[0].translationSubmissionUid,
         state = "In Progress",
+        lastExportedDate = DateTime.UtcNow
       }  };
 
       var updatedRequest = client.UpdateTranslationRequest(updateRequest, request.translationRequestUid);
-      
+
       // List translation requests
       foreach (var s in client.Get())
       {

@@ -26,12 +26,14 @@ namespace Smartling.Api.Model
     public int percentComplete { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public DateTime lastExportedDate { get; set; }
+    [JsonConverter(typeof(IsoDateTimeJsonConverter))]
+    public DateTime? lastExportedDate { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string lastErrorMessage { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public DateTime modifiedDate { get; set; }
+    [JsonConverter(typeof(IsoDateTimeJsonConverter))]
+    public DateTime? modifiedDate { get; set; }
   }
 }
