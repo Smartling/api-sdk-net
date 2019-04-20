@@ -16,5 +16,6 @@ namespace Smartling.Api.Model
     public string lastErrorMessage { get; set; }
     public DateTime createdDate { get; set; }
     public DateTime modifiedDate { get; set; }
+    public DateTime? submittedDate { get; set; }
   }
 }

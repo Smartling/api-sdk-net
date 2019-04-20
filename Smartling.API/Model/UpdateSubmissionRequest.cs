@@ -23,9 +23,6 @@ namespace Smartling.Api.Model
     public string submitterName { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public int percentComplete { get; set; }
-
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     [JsonConverter(typeof(IsoDateTimeJsonConverter))]
     public DateTime? lastExportedDate { get; set; }
 
