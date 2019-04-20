@@ -110,7 +110,8 @@ namespace Smartling.ApiSample
 
       var query = new Dictionary<string, string>();
       query.Add("state", "New|In Progress");
-      query.Add("customTranslationData.MediaContent", "true");
+      query.Add("customTranslationData", "{\"MediaContent\": false }");
+      query.Add("customOriginalData", "{\"Path\": \"/sitecore/content/Home/Team/Chris-Castle\" }");
       searchResult = client.GetPage(query, 100, 0);
 
       // Create subsmission
@@ -124,7 +125,9 @@ namespace Smartling.ApiSample
       request = client.CreateSubmission(request.translationRequestUid, new List<CreateSubmissionRequest<SampleCustomSubmissionData>>() { submission });
 
       // Update submission
-      var updateRequest = new UpdateTranslationRequest<SampleCustomSubmissionData>();
+      var updateRequest = new UpdateTranslationRequest<SampleCustomTranslationRequestData, SampleCustomSubmissionData>();
+      updateRequest.customOriginalData = request.customOriginalData;
+      updateRequest.customOriginalData.Path = "newpath";
       updateRequest.translationSubmissions = new List<UpdateSubmissionRequest<SampleCustomSubmissionData>> {new UpdateSubmissionRequest<SampleCustomSubmissionData> {
         translationSubmissionUid = request.translationSubmissions[0].translationSubmissionUid,
         state = "In Progress",
