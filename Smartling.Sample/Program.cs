@@ -84,7 +84,7 @@ namespace Smartling.ApiSample
       var itemId = Guid.NewGuid().ToString();
 
       // List translation requests
-      foreach (var s in client.Get("state", "In Progress"))
+      foreach (var s in client.GetAll("state", "In Progress"))
       {
         Console.WriteLine(s.translationRequestUid + " " + s.translationSubmissions.Count() + " " + s.fileUri);
         foreach(var sub in s.translationSubmissions)
@@ -92,6 +92,8 @@ namespace Smartling.ApiSample
           Console.WriteLine("  " + sub.state + sub.targetLocaleId);
         }
       }
+
+      var singleRequest = client.Get("27c4b81d8d52");
 
       // Create translation request
       var createTranslationRequest = new CreateTranslationRequest<SampleCustomTranslationRequestData>();
@@ -106,12 +108,12 @@ namespace Smartling.ApiSample
 
       // Search submissions
       var searchResult = client.GetPage("originalAssetKey.Key", itemId, 100, 0);
-      searchResult = client.GetPage("state", "In Progress", 100, 0);
+      searchResult = client.GetPage("translationRequestUid", "2e3b50ec4de3", 100, 0);
 
       var query = new Dictionary<string, string>();
-      query.Add("state", "New|In Progress");
+      query.Add("state", "Translated|Completed");
       query.Add("customTranslationData", "{\"MediaContent\": false }");
-      query.Add("customOriginalData", "{\"Path\": \"/sitecore/content/Home/Team/Chris-Castle\" }");
+      // query.Add("customOriginalData", "{\"Path\": \"/sitecore/content/Home/Team/Chris-Castle\" }");
       searchResult = client.GetPage(query, 100, 0);
 
       // Create subsmission
@@ -137,7 +139,7 @@ namespace Smartling.ApiSample
       var updatedRequest = client.UpdateTranslationRequest(updateRequest, request.translationRequestUid);
 
       // List translation requests
-      foreach (var s in client.Get("state", "In Progress"))
+      foreach (var s in client.GetAll("state", "In Progress"))
       {
         Console.WriteLine(s.translationRequestUid + " " + s.translationSubmissions.Count() + " " + s.fileUri);
       }

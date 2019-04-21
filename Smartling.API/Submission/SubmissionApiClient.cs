@@ -12,6 +12,7 @@ namespace Smartling.Api.Job
     private readonly string CreateSubmissionUrl = "/submission-service-api/v2/projects/{0}/buckets/{1}/translation-requests";
     private readonly string GetSubmissionsUrl = "/submission-service-api/v2/projects/{0}/buckets/{1}/translation-requests?limit={2}&offset={3}";
     private readonly string UpdateSubmissionUrl = "/submission-service-api/v2/projects/{0}/buckets/{1}/translation-requests/{2}";
+    private readonly string GetRequestUrl = "/submission-service-api/v2/projects/{0}/buckets/{1}/translation-requests/{2}";
 
     private readonly string projectId;
     private readonly string bucketName;
@@ -56,8 +57,16 @@ namespace Smartling.Api.Job
       var response = ExecutePutRequest(uriBuilder, request, auth);
       return JsonConvert.DeserializeObject<TranslationRequest<TCustomRequest, TCustomSubmission>>(response["response"]["data"].ToString());
     }
-    
-    public virtual List<TranslationRequest<TCustomRequest, TCustomSubmission>> Get(string searchField, string searchValue)
+
+    public virtual TranslationRequest<TCustomRequest, TCustomSubmission> Get(string translationRequestUid)
+    {
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(GetRequestUrl, projectId, bucketName, translationRequestUid));
+      var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
+      var response = ExecuteGetRequest(request, uriBuilder, auth);
+      return JsonConvert.DeserializeObject<TranslationRequest<TCustomRequest, TCustomSubmission>>(response["response"]["data"].ToString());
+    }
+
+    public virtual List<TranslationRequest<TCustomRequest, TCustomSubmission>> GetAll(string searchField, string searchValue)
     {
       var page = GetPage(searchField, searchValue, PageSize, 0);
       var results = new List<TranslationRequest<TCustomRequest, TCustomSubmission>>();
