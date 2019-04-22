@@ -86,7 +86,11 @@ namespace Smartling.Api.Job
     public virtual SubmissionItemList<TCustomRequest, TCustomSubmission> GetPage(string searchField, string searchValue, int limit, int offset)
     {
       var query = new Dictionary<string, string>();
-      query.Add(searchField, searchValue);
+      if (!string.IsNullOrEmpty(searchField))
+      {
+        query.Add(searchField, searchValue);
+      }
+
       return GetPage(query, limit, offset);
     }
 
