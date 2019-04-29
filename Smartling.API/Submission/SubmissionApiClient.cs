@@ -51,7 +51,7 @@ namespace Smartling.Api.Job
       return JsonConvert.DeserializeObject<TranslationRequest<TOriginalKey, TCustomRequest, TTargetKey, TCustomSubmission>>(response["response"]["data"].ToString());
     }
 
-    public virtual TranslationRequest<TOriginalKey, TCustomRequest, TTargetKey, TCustomSubmission> UpdateTranslationRequest(UpdateTranslationRequest<TCustomRequest, TTargetKey, TCustomSubmission> request, string translationRequestUid)
+    public virtual TranslationRequest<TOriginalKey, TCustomRequest, TTargetKey, TCustomSubmission> UpdateTranslationRequest(UpdateTranslationRequest<TOriginalKey, TCustomRequest, TTargetKey, TCustomSubmission> request, string translationRequestUid)
     {
       var uriBuilder = this.GetRequestStringBuilder(string.Format(UpdateSubmissionUrl, projectId, bucketName, translationRequestUid));
       var response = ExecutePutRequest(uriBuilder, request, auth);

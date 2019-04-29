@@ -98,7 +98,7 @@ namespace Smartling.ApiSample
       // Sample code to process items in bulk
       foreach (var item in client.GetAll(string.Empty, string.Empty))
       {
-        var r = new UpdateTranslationRequest<SampleCustomTranslationRequestData, SampleTargetAssetKey, SampleCustomSubmissionData>();
+        var r = new UpdateTranslationRequest<SampleOriginalAssetKey, SampleCustomTranslationRequestData, SampleTargetAssetKey, SampleCustomSubmissionData>();
         if (item.translationSubmissions == null || item.translationSubmissions.Where(x => x.state != "Deleted").Count() == 0)
         {
           continue;
@@ -151,7 +151,7 @@ namespace Smartling.ApiSample
       request = client.CreateSubmission(request.translationRequestUid, new List<CreateSubmissionRequest<SampleTargetAssetKey, SampleCustomSubmissionData>>() { submission });
 
       // Update submission
-      var updateRequest = new UpdateTranslationRequest<SampleCustomTranslationRequestData, SampleTargetAssetKey, SampleCustomSubmissionData>();
+      var updateRequest = new UpdateTranslationRequest<SampleOriginalAssetKey, SampleCustomTranslationRequestData, SampleTargetAssetKey, SampleCustomSubmissionData>();
       updateRequest.customOriginalData = request.customOriginalData;
       updateRequest.customOriginalData.Path = "newpath";
       updateRequest.translationSubmissions = new List<UpdateSubmissionRequest<SampleTargetAssetKey, SampleCustomSubmissionData>> {new UpdateSubmissionRequest<SampleTargetAssetKey, SampleCustomSubmissionData> {
