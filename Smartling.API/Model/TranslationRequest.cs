@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Smartling.Api.Model
 {
-  public class TranslationRequest<TCustomRequest, TCustomSubmission>
+  public class TranslationRequest<TOriginalKey, TCustomRequest, TTargetKey, TCustomSubmission>
   {
     public string translationRequestUid { get; set; }
     public string projectId { get; set; }
     public string bucketName { get; set; }
-    public OriginalAssetKey originalAssetKey { get; set; }
+    public TOriginalKey originalAssetKey { get; set; }
     public string title { get; set; }
     public string fileUri { get; set; }
     public int totalWordCount { get; set; }
@@ -20,6 +20,6 @@ namespace Smartling.Api.Model
     public TCustomRequest customOriginalData { get; set; }
     public DateTime createdDate { get; set; }
     public DateTime modifiedDate { get; set; }
-    public List<TranslationSubmission<TCustomSubmission>> translationSubmissions { get; set; }
+    public List<TranslationSubmission<TTargetKey, TCustomSubmission>> translationSubmissions { get; set; }
   }
 }

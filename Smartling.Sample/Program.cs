@@ -76,30 +76,54 @@ namespace Smartling.ApiSample
         Console.WriteLine(item.fileUri + " " + item.localeId + " " + item.publishDate);
       }
     }
-    
+
     private static void Submissions(OAuthAuthenticationStrategy auth)
     {
-      var client = new SubmissionApiClient<SampleCustomTranslationRequestData, SampleCustomSubmissionData>(auth, projectId, "1e65ee5c-2555-4fd4-8305-56228ee3a0dd");
+      var client = new SubmissionApiClient<SampleOriginalAssetKey, SampleCustomTranslationRequestData, SampleTargetAssetKey, SampleCustomSubmissionData>(auth, projectId, "1e65ee5c-2555-4fd4-8305-56228ee3a0dd");
 
       var itemId = Guid.NewGuid().ToString();
 
       // List translation requests
-      foreach (var s in client.GetAll("state", "In Progress"))
+      var query = new Dictionary<string, string>();
+      query.Add("state", "In Progress|Translated|Completed");
+      foreach (var s in client.GetPage(query, 100, 0).items)
       {
         Console.WriteLine(s.translationRequestUid + " " + s.translationSubmissions.Count() + " " + s.fileUri);
-        foreach(var sub in s.translationSubmissions)
+        foreach (var sub in s.translationSubmissions)
         {
           Console.WriteLine("  " + sub.state + sub.targetLocaleId);
         }
       }
 
+      // Sample code to process items in bulk
+      foreach (var item in client.GetAll(string.Empty, string.Empty))
+      {
+        var r = new UpdateTranslationRequest<SampleCustomTranslationRequestData, SampleTargetAssetKey, SampleCustomSubmissionData>();
+        if (item.translationSubmissions == null || item.translationSubmissions.Where(x => x.state != "Deleted").Count() == 0)
+        {
+          continue;
+        }
+
+        r.translationSubmissions = new List<UpdateSubmissionRequest<SampleTargetAssetKey, SampleCustomSubmissionData>>();
+        foreach (TranslationSubmission<SampleTargetAssetKey,  SampleCustomSubmissionData> s in item.translationSubmissions)
+        {
+          r.translationSubmissions.Add(new UpdateSubmissionRequest<SampleTargetAssetKey, SampleCustomSubmissionData>
+          {
+            translationSubmissionUid = s.translationSubmissionUid,
+            state = "Deleted"
+          });
+        }
+
+        var ur = client.UpdateTranslationRequest(r, item.translationRequestUid);
+      }
+
       var singleRequest = client.Get("27c4b81d8d52");
 
       // Create translation request
-      var createTranslationRequest = new CreateTranslationRequest<SampleCustomTranslationRequestData>();
+      var createTranslationRequest = new CreateTranslationRequest<SampleOriginalAssetKey, SampleCustomTranslationRequestData>();
       createTranslationRequest.contentHash = Guid.NewGuid().ToString().Substring(0, 32);
       createTranslationRequest.fileUri = Guid.NewGuid().ToString();
-      createTranslationRequest.originalAssetKey = new OriginalAssetKey() { Key = itemId };
+      createTranslationRequest.originalAssetKey = new SampleOriginalAssetKey() { Key = itemId };
       createTranslationRequest.originalLocaleId = "en";
       createTranslationRequest.title = "test";
       createTranslationRequest.customOriginalData = new SampleCustomTranslationRequestData() { ItemId = itemId, Path = "content/home" };
@@ -110,27 +134,27 @@ namespace Smartling.ApiSample
       var searchResult = client.GetPage("originalAssetKey.Key", itemId, 100, 0);
       searchResult = client.GetPage("translationRequestUid", "2e3b50ec4de3", 100, 0);
 
-      var query = new Dictionary<string, string>();
+      query = new Dictionary<string, string>();
       query.Add("state", "Translated|Completed");
       query.Add("customTranslationData", "{\"MediaContent\": false }");
       // query.Add("customOriginalData", "{\"Path\": \"/sitecore/content/Home/Team/Chris-Castle\" }");
       searchResult = client.GetPage(query, 100, 0);
 
       // Create subsmission
-      var submission = new CreateSubmissionRequest<SampleCustomSubmissionData>();
-      submission.state = "New";
+      var submission = new CreateSubmissionRequest<SampleTargetAssetKey, SampleCustomSubmissionData>();
+      submission.state = "Deleted";
       submission.submitterName = "test";
       submission.targetLocaleId = "ru-RU";
-      submission.targetAssetKey = new TargetAssetKey() { Key = Guid.NewGuid().ToString() };
+      submission.targetAssetKey = new SampleTargetAssetKey() { Key = Guid.NewGuid().ToString() };
       submission.customTranslationData = new SampleCustomSubmissionData() { Revision = Guid.NewGuid().ToString(), Locked = false, MediaContent = false };
 
-      request = client.CreateSubmission(request.translationRequestUid, new List<CreateSubmissionRequest<SampleCustomSubmissionData>>() { submission });
+      request = client.CreateSubmission(request.translationRequestUid, new List<CreateSubmissionRequest<SampleTargetAssetKey, SampleCustomSubmissionData>>() { submission });
 
       // Update submission
-      var updateRequest = new UpdateTranslationRequest<SampleCustomTranslationRequestData, SampleCustomSubmissionData>();
+      var updateRequest = new UpdateTranslationRequest<SampleCustomTranslationRequestData, SampleTargetAssetKey, SampleCustomSubmissionData>();
       updateRequest.customOriginalData = request.customOriginalData;
       updateRequest.customOriginalData.Path = "newpath";
-      updateRequest.translationSubmissions = new List<UpdateSubmissionRequest<SampleCustomSubmissionData>> {new UpdateSubmissionRequest<SampleCustomSubmissionData> {
+      updateRequest.translationSubmissions = new List<UpdateSubmissionRequest<SampleTargetAssetKey, SampleCustomSubmissionData>> {new UpdateSubmissionRequest<SampleTargetAssetKey, SampleCustomSubmissionData> {
         translationSubmissionUid = request.translationSubmissions[0].translationSubmissionUid,
         state = "In Progress",
         lastExportedDate = DateTime.UtcNow

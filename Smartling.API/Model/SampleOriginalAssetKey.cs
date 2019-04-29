@@ -1,6 +1,6 @@
 ﻿namespace Smartling.Api.Model
 {
-  public class TargetAssetKey
+  public class SampleOriginalAssetKey
   {
     public string Key { get; set; }
   }
