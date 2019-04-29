@@ -2,12 +2,12 @@
 
 namespace Smartling.Api.Model
 {
-  public class TranslationSubmission<T>
+  public class TranslationSubmission<TTargetKey, TCustomSubmission>
   {
     public string translationSubmissionUid { get; set; }
     public string translationRequestUid { get; set; }
-    public TargetAssetKey targetAssetKey { get; set; }
-    public T customTranslationData { get; set; }
+    public TTargetKey targetAssetKey { get; set; }
+    public TCustomSubmission customTranslationData { get; set; }
     public string targetLocaleId { get; set; }
     public string state { get; set; }
     public string submitterName { get; set; }

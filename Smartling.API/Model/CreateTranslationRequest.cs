@@ -2,10 +2,10 @@
 
 namespace Smartling.Api.Model
 {
-  public class CreateTranslationRequest<T>
+  public class CreateTranslationRequest<TOriginalKey, TCustomRequest>
   {
-    public OriginalAssetKey originalAssetKey { get; set; }
-    public T customOriginalData { get; set; }
+    public TOriginalKey originalAssetKey { get; set; }
+    public TCustomRequest customOriginalData { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string title { get; set; }

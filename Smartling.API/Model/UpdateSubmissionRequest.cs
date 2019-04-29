@@ -3,15 +3,15 @@ using System;
 
 namespace Smartling.Api.Model
 {
-  public class UpdateSubmissionRequest<T>
+  public class UpdateSubmissionRequest<TTargetKey, TCustomSubmission>
   {
     public string translationSubmissionUid { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public TargetAssetKey targetAssetKey { get; set; }
+    public TTargetKey targetAssetKey { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public T customTranslationData { get; set; }
+    public TCustomSubmission customTranslationData { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string targetLocaleId { get; set; }
