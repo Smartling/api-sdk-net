@@ -6,10 +6,10 @@ namespace Smartling.Api.Model
   public class UpdateTranslationRequest<TOriginalKey, TCustomRequest, TTargetKey, TCustomSubmission>
   {
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public string originalAssetKey { get; set; }
+    public TOriginalKey originalAssetKey { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-    public TOriginalKey originalLocale { get; set; }
+    public string originalLocale { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public TCustomRequest customOriginalData { get; set; }
