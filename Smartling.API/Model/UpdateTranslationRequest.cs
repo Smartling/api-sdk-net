@@ -9,6 +9,9 @@ namespace Smartling.Api.Model
     public TOriginalKey originalAssetKey { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    public TOriginalKey originalLocale { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public TCustomRequest customOriginalData { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
