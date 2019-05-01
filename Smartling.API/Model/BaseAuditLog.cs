@@ -36,18 +36,40 @@ namespace Smartling.Api.Model
     /// </example>
     public string envId { get; set; }
 
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string fileUri { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string translationJobUid { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string translationJobName { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string translationJobDueDate { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public bool translationJobAuthorize { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string batchUid { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string sourceLocaleId { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public List<string> targetLocaleIds { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string description { get; set; }
 
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string clientUserId { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string clientUserEmail { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string clientUserName { get; set; }
   }
 }
