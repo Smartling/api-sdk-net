@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <PackageId>Smartling.API</PackageId>
     <Product>Smartling.API</Product>
-    <Version>2.4.32.0</Version>
+    <Version>2.4.33.0</Version>
     <Authors>Smartling</Authors>
     <Copyright>Copyright © Smartling 2019</Copyright>
   </PropertyGroup>
