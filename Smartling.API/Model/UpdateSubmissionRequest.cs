@@ -20,6 +20,9 @@ namespace Smartling.Api.Model
     public string state { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    public DateTime? submittedDate { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string submitterName { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
