@@ -25,17 +25,18 @@ namespace Smartling.ApiSample
       var fileApiClient = new FileApiClient(auth, projectId, string.Empty);
       var projectApiClient = new ProjectApiClient(auth, projectId);
       fileApiClient.ApiGatewayUrl = "https://api.smartling.com";
-      string fileUri = "ApiSample_" + Guid.NewGuid();
+      string fileName = "ApiSample_" + Guid.NewGuid();
+      string fileUri = "/master/" + fileName;
 
+      Upload(fileApiClient, fileUri, fileName, "xml");
+      Download(fileApiClient, fileUri);
       Submissions(auth);
       Audit(auth);
       Jobs(auth);
       Published(auth);
       GetProjectData(projectApiClient);
-      Upload(fileApiClient, fileUri, "xml");
       List(fileApiClient);
       Status(fileApiClient, fileUri, "ru-RU");
-      Download(fileApiClient, fileUri);
       LastModified(fileApiClient, fileUri);
       Authorization(fileApiClient);
       Deletion(fileApiClient, fileUri);
@@ -209,8 +210,9 @@ namespace Smartling.ApiSample
           translationJobUid = jobs.First().translationJobUid
         });
 
-      string fileUri = "ApiSample_" + Guid.NewGuid();
-      batchApiClient.UploadFile(@"C:\Sample.xml", fileUri, "xml", "ru-RU", true, batch.batchUid);
+      string filePath = "ApiSample_" + Guid.NewGuid();
+      string fileUri = "/master/" + filePath;
+      batchApiClient.UploadFile(@"C:\Sample.xml", fileUri, "xml", "ru-RU", true, batch.batchUid, filePath);
       batchApiClient.Execute(batch.batchUid);
 
       var batchResult = batchApiClient.Get(batch.batchUid);
@@ -316,12 +318,12 @@ namespace Smartling.ApiSample
     /// <param name="client"></param>
     /// <param name="fileUri"></param>
     /// <param name="fileType"></param>
-    private static void Upload(FileApiClient client, string fileUri, string fileType)
+    private static void Upload(FileApiClient client, string fileUri, string filePath, string fileType)
     {
       Console.WriteLine(string.Empty);
       Console.WriteLine("Uploading file...");
 
-      var status = client.UploadFile(@"C:\Sample.xml", fileUri, fileType, "ru-RU,fr-FR", true);
+      var status = client.UploadFile(@"C:\Sample.xml", fileUri, fileType, "ru-RU,es", true, filePath);
       Console.WriteLine(status.stringCount);
     }
 

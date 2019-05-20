@@ -27,6 +27,7 @@ namespace Smartling.Api.File
     private const string FileUriParameterName = "fileUri";
     private const string LocaleIdsParameterName = "localeIds[]";
     private const string FileTypeParameterName = "fileType";
+    private const string NameSpaceParameterName = "smartling.namespace";
     private const string RetrievalTypeParameterName = "retrievalType";
     private const string CallbackUrlParameterName = "callbackUrl";
     private const string LocalesToApproveParameterName = "localeIdsToAuthorize[]";
@@ -51,24 +52,26 @@ namespace Smartling.Api.File
     /// <param name="fileType">File type, used by Smartling</param>
     /// <param name="approvedLocales">A list of locales separated by ','. Example: "ru-RU,fr-FR"</param>
     /// <param name="authorizeContent">By default, content needs to be approved before translating</param>
+    /// <param name="nameSpace">Assign a custom namespace to a file using the smartling.namespace API directive when you upload the file. 
+    /// You may wish to do this if your File URI contains version information, to avoid creating a full set of unique strings every time you update a file.</param>
     /// <returns></returns>
-    public virtual FileUploadResult UploadFile(string filePath, string fileUri, string fileType, string approvedLocales, bool authorizeContent)
+    public virtual FileUploadResult UploadFile(string filePath, string fileUri, string fileType, string approvedLocales, bool authorizeContent, string nameSpace = null)
     {
       using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
       {
-        return UploadFileStream(fileStream, fileUri, fileType, approvedLocales, authorizeContent);
+        return UploadFileStream(fileStream, fileUri, fileType, approvedLocales, authorizeContent, nameSpace);
       }
     }
 
-    public virtual FileUploadResult UploadFileContents(string fileContents, string fileUri, string fileType, string approvedLocales, bool authorizeContent)
+    public virtual FileUploadResult UploadFileContents(string fileContents, string fileUri, string fileType, string approvedLocales, bool authorizeContent, string nameSpace = null)
     {
       using (var fileStream = fileContents.ToStream())
       {
-        return UploadFileStream(fileStream, fileUri, fileType, approvedLocales, authorizeContent);
+        return UploadFileStream(fileStream, fileUri, fileType, approvedLocales, authorizeContent, nameSpace);
       }
     }
 
-    public virtual FileUploadResult UploadFileStream(Stream fileStream, string fileUri, string fileType, string approvedLocales, bool authorizeContent)
+    public virtual FileUploadResult UploadFileStream(Stream fileStream, string fileUri, string fileType, string approvedLocales, bool authorizeContent, string nameSpace = null)
     {
       var uriBuilder = this.GetRequestStringBuilder(UploadUrl.FormatUri(projectId));
       var formData = new NameValueCollection();
@@ -84,6 +87,11 @@ namespace Smartling.Api.File
       if (authorizeContent)
       {
         formData.Add(LocalesToApproveParameterName, approvedLocales);
+      }
+
+      if (!string.IsNullOrEmpty(nameSpace))
+      {
+        formData.Add(NameSpaceParameterName, nameSpace);
       }
 
       return ExecuteUploadRequest(fileStream, fileUri, uriBuilder, formData);
