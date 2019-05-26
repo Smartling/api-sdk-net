@@ -14,7 +14,7 @@ namespace Smartling.Api.Model
     public int totalWordCount { get; set; }
     public int totalStringCount { get; set; }
     public string contentHash { get; set; }
-    public string originalLocale { get; set; }
+    public string originalLocaleId { get; set; }
     public bool outdated { get; set; }
     public DateTime localeLastModifiedDate { get; set; }
     public TCustomRequest customOriginalData { get; set; }
