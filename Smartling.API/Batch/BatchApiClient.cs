@@ -18,6 +18,7 @@ namespace Smartling.Api.Batch
     
     private const string FileUriParameterName = "fileUri";
     private const string FileTypeParameterName = "fileType";
+    private const string NameSpaceParameterName = "smartling.namespace";
     private const string CallbackUrlParameterName = "callbackUrl";
     private const string LocalesToApproveParameterName = "localeIdsToAuthorize[]";
     private const string CliendUidParameterName = "smartling.client_lib_id";
@@ -40,15 +41,15 @@ namespace Smartling.Api.Batch
       return JsonConvert.DeserializeObject<Model.Batch>(response["response"]["data"].ToString());
     }
 
-    public virtual BatchUploadResult UploadFile(string filePath, string fileUri, string fileType, string approvedLocales, bool authorizeContent, string batchUid)
+    public virtual BatchUploadResult UploadFile(string filePath, string fileUri, string fileType, string approvedLocales, bool authorizeContent, string batchUid, string nameSpace = null)
     {
       using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
       {
-        return UploadFileStream(fileStream, fileUri, fileType, approvedLocales, authorizeContent, batchUid);
+        return UploadFileStream(fileStream, fileUri, fileType, approvedLocales, authorizeContent, batchUid, nameSpace);
       }
     }
 
-    public virtual BatchUploadResult UploadFileStream(Stream fileStream, string fileUri, string fileType, string approvedLocales, bool authorizeContent, string batchUid)
+    public virtual BatchUploadResult UploadFileStream(Stream fileStream, string fileUri, string fileType, string approvedLocales, bool authorizeContent, string batchUid, string nameSpace)
     {
       var uriBuilder = this.GetRequestStringBuilder(string.Format(UploadBatchUrl, projectId, batchUid));
       var formData = new NameValueCollection();
@@ -64,6 +65,11 @@ namespace Smartling.Api.Batch
       if (authorizeContent)
       {
         formData.Add(LocalesToApproveParameterName, approvedLocales);
+      }
+
+      if (!string.IsNullOrEmpty(nameSpace))
+      {
+        formData.Add(NameSpaceParameterName, nameSpace);
       }
 
       return ExecuteUploadRequest(fileStream, fileUri, uriBuilder, formData);
