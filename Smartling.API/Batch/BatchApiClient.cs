@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
@@ -22,6 +23,7 @@ namespace Smartling.Api.Batch
     private const string CallbackUrlParameterName = "callbackUrl";
     private const string LocalesToApproveParameterName = "localeIdsToAuthorize[]";
     private const string CliendUidParameterName = "smartling.client_lib_id";
+    private const string LocalesSeparator = ",";
 
     private readonly string projectId;
     private readonly string callbackUrl;
@@ -41,38 +43,34 @@ namespace Smartling.Api.Batch
       return JsonConvert.DeserializeObject<Model.Batch>(response["response"]["data"].ToString());
     }
 
-    public virtual BatchUploadResult UploadFile(string filePath, string fileUri, string fileType, string approvedLocales, bool authorizeContent, string batchUid, string nameSpace = null)
+    public virtual BatchUploadResult UploadFile(BatchUpload batch)
     {
-      using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+      using (var fileStream = new FileStream(batch.FilePath, FileMode.Open, FileAccess.Read))
       {
-        return UploadFileStream(fileStream, fileUri, fileType, approvedLocales, authorizeContent, batchUid, nameSpace);
+        return UploadFileStream(batch, fileStream);
       }
     }
 
-    public virtual BatchUploadResult UploadFileStream(Stream fileStream, string fileUri, string fileType, string approvedLocales, bool authorizeContent, string batchUid, string nameSpace)
+    public virtual BatchUploadResult UploadFileStream(BatchUpload batch, FileStream fileStream)
     {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(UploadBatchUrl, projectId, batchUid));
+      var uriBuilder = this.GetRequestStringBuilder(string.Format(UploadBatchUrl, projectId, batch.BatchUid));
       var formData = new NameValueCollection();
-      formData.Add(FileUriParameterName, fileUri);
-      formData.Add(FileTypeParameterName, fileType);
+      formData.Add(FileUriParameterName, batch.FileUri);
+      formData.Add(FileTypeParameterName, batch.FileType);
       formData.Add(CliendUidParameterName, JsonConvert.SerializeObject(this.ApiClientUid));
+      formData.Add(LocalesToApproveParameterName, string.Join(LocalesSeparator, batch.ApprovedLocales));
 
       if (!string.IsNullOrEmpty(this.callbackUrl))
       {
         formData.Add(CallbackUrlParameterName, this.callbackUrl);
       }
 
-      if (authorizeContent)
+      if (!string.IsNullOrEmpty(batch.NameSpace))
       {
-        formData.Add(LocalesToApproveParameterName, approvedLocales);
+        formData.Add(NameSpaceParameterName, batch.NameSpace);
       }
 
-      if (!string.IsNullOrEmpty(nameSpace))
-      {
-        formData.Add(NameSpaceParameterName, nameSpace);
-      }
-
-      return ExecuteUploadRequest(fileStream, fileUri, uriBuilder, formData);
+      return ExecuteUploadRequest(fileStream, batch.FileUri, uriBuilder, formData);
     }
 
     private BatchUploadResult ExecuteUploadRequest(Stream fileStream, string fileUri, StringBuilder uriBuilder, NameValueCollection formData)
