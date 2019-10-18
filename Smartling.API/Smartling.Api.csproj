@@ -7,12 +7,18 @@
     <Version>2.4.34.0</Version>
     <Authors>Smartling</Authors>
     <Copyright>Copyright © Smartling 2019</Copyright>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>Key1.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="bin\**" />
     <EmbeddedResource Remove="bin\**" />
     <None Remove="bin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Key1.snk" />
   </ItemGroup>
 
   <ItemGroup>
