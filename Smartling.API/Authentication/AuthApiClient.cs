@@ -5,11 +5,11 @@ namespace Smartling.Api.Authentication
 {
   public class AuthApiClient : ApiClientBase
   {
-        private const string AUTH_API_V2_AUTHENTICATE = "/auth-api/v2/authenticate";
-        private const string AUTH_API_V2_REFRESH = "/auth-api/v2/authenticate/refresh";
         private readonly string userIdentifier;
         private readonly string userSecret;
-        
+
+        protected virtual string AuthApiV2Authenticate { get { return "/auth-api/v2/authenticate"; } }
+        protected virtual string AuthApiV2Refresh { get { return "/auth-api/v2/authenticate/refresh"; } }
 
         public AuthApiClient(string userIdentifier, string userSecret)
         {
@@ -20,7 +20,7 @@ namespace Smartling.Api.Authentication
         public virtual AuthResponse Authenticate()
         {
           var command = new AuthCommand() { userIdentifier = this.userIdentifier, userSecret = this.userSecret };
-          var request = PrepareJsonPostRequest(ApiGatewayUrl + AUTH_API_V2_AUTHENTICATE, command, String.Empty);
+          var request = PrepareJsonPostRequest(ApiGatewayUrl + AuthApiV2Authenticate, command, String.Empty);
           var jsonResponse = GetResponse(request);
           var authResponse = JsonConvert.DeserializeObject<AuthResponseWrapper>(jsonResponse);
 
@@ -30,7 +30,7 @@ namespace Smartling.Api.Authentication
         public virtual AuthResponse Refresh(string refreshToken)
         {
           var command = new RefreshCommand() { refreshToken = refreshToken };
-          var request = PrepareJsonPostRequest(ApiGatewayUrl + AUTH_API_V2_REFRESH, command, string.Empty);
+          var request = PrepareJsonPostRequest(ApiGatewayUrl + AuthApiV2Refresh, command, string.Empty);
           var jsonResponse = GetResponse(request);
           var refreshResponse = JsonConvert.DeserializeObject<AuthResponseWrapper>(jsonResponse);
 
