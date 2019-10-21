@@ -86,11 +86,11 @@ namespace Smartling.ApiTests
         }
 
         [TestMethod]
-        public void ShouldUploadDashboardData()
+        public void ShouldRetrieveDasboardData()
         {
             // Arrange
             var auth = GetAuth();
-            var client = new Mock<TranslatorDashboard>(auth)
+            var client = new Mock<TranslatorDashboardApiClient>(auth)
             {
                 CallBase = true
             };

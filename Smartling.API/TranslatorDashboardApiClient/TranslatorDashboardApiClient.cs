@@ -6,12 +6,12 @@ using System.Net;
 
 namespace Smartling.Api.TranslatorDashboardApiClient
 {
-    public class TranslatorDashboard : ApiClientBase
+    public class TranslatorDashboardApiClient : ApiClientBase
     {
         private readonly IAuthenticationStrategy _auth;
         private const string DashboardUrl = "/translator-dashboard-api/v2/jobs";
 
-        public TranslatorDashboard(IAuthenticationStrategy auth)
+        public TranslatorDashboardApiClient(IAuthenticationStrategy auth)
         {
             _auth = auth;
         }
