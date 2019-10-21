@@ -41,21 +41,6 @@ namespace Smartling.ApiTests
         }
 
         [TestMethod]
-        public void UserAuthenticateTest()
-        {
-            var client = new Mock<AuthApiUser>("test", "test")
-            {
-                CallBase = true
-            };
-            client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(ValidAuthRespone);
-            client.Setup(foo => foo.PrepareJsonPostRequest(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<string>())).Returns((WebRequest)null);
-            var result = client.Object.Authenticate();
-
-            Assert.AreEqual("{access token}", result.data.accessToken);
-            Assert.AreEqual("{refresh token}", result.data.refreshToken);
-        }
-
-        [TestMethod]
         public void RefreshTest()
         {
           // Arrange

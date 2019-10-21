@@ -8,7 +8,7 @@
     <Authors>Smartling</Authors>
     <Copyright>Copyright © Smartling 2019</Copyright>
     <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>Key1.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>key1.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
