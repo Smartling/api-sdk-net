@@ -4,7 +4,7 @@
     {
         public Account account { get; set; }
         public Project project { get;set;}
-        public Job translationJob { get; set; }
+        public TranslationJob translationJob { get; set; }
         public string targetLocaleId { get; set; }
         public string originalLocaleId { get; set; }
         public WorkflowStep workflowStep { get; set; }

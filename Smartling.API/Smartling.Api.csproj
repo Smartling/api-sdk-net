@@ -9,6 +9,7 @@
     <Copyright>Copyright © Smartling 2019</Copyright>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>key1.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>
