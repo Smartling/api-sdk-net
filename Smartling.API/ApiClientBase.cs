@@ -20,6 +20,8 @@ namespace Smartling.Api
     private const string FileNameParameterName = "file";
     private const string AuthenticationErrorCode = "AUTHENTICATION_ERROR";
     private const string MaintenanceModeErrorCode = "MAINTENANCE_MODE_ERROR";
+    private const string ThrottlingErrorCode = "MAX_OPERATIONS_LIMIT_EXCEEDED";
+    
     private string apiGatewayUrl;
 
     public string ApiGatewayUrl
@@ -86,6 +88,11 @@ namespace Smartling.Api
             if (messages.Contains("HTTP 401 Unauthorized") || error.response.code == AuthenticationErrorCode)
             {
               throw new AuthenticationException(error.response.code + ": " + messages, e);
+            }
+
+            if (messages.Contains(ThrottlingErrorCode))
+            {
+              throw new ThrottlingException(error.response.code + ": " + messages, e);
             }
 
             if (error.response.code == MaintenanceModeErrorCode)
