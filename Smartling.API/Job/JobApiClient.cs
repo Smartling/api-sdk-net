@@ -11,12 +11,12 @@ namespace Smartling.Api.Job
     private readonly string CreateJobUrl = "/jobs-api/v3/projects/{0}/jobs";
     private readonly string GetJobUrl = "/jobs-api/v3/projects/{0}/jobs?limit={1}&offset={2}";
     private readonly string GetJobByIdUrl = "/jobs-api/v3/projects/{0}/jobs/{1}";
-    private readonly string GetJobByNameUrl = "/jobs-api/v3/projects/{0}/jobs?jobName={1}&limit={2}&offset={3}";
     private readonly string UpdateJobUrl = "/jobs-api/v3/projects/{0}/jobs/{1}";
     private readonly string JobFileUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/file/add";
     private readonly string JobAuthorizeUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/authorize";
     private readonly string AddLocaleUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/locales/{2}?syncContent={3}";
     private readonly string GetProcessesUrl = "/jobs-api/v3/projects/{0}/jobs/processes";
+    private readonly string ActiveJobsFilter = "IN_PROGRESS&translationJobStatus=COMPLETED&translationJobStatus=AWAITING_AUTHORIZATION";
 
     private readonly string projectId;
     private readonly IAuthenticationStrategy auth;
@@ -78,9 +78,9 @@ namespace Smartling.Api.Job
       return JsonConvert.DeserializeObject<AddFileToJobResponse>(response["response"]["data"].ToString());
     }
 
-    public virtual List<Smartling.Api.Model.Job> Get(string jobName = "")
+    public virtual List<Smartling.Api.Model.Job> Get(string jobName = "", string statusFilter = "")
     {
-      var page = GetPage(jobName, PageSize, 0);
+      var page = GetPage(jobName, PageSize, 0, statusFilter);
       var results = new List<Smartling.Api.Model.Job>();
       var pageNumber = 0;
       results.AddRange(page.items);
@@ -88,25 +88,32 @@ namespace Smartling.Api.Job
       while (page.totalCount > results.Count && page.items.Count > 0)
       {
         pageNumber++;
-        page = GetPage(jobName, PageSize, PageSize * pageNumber);
+        page = GetPage(jobName, PageSize, PageSize * pageNumber, statusFilter);
         results.AddRange(page.items);
       }
 
       return results;
     }
 
-    public virtual JobList GetPage(string jobName, int limit, int offset)
+    public virtual List<Smartling.Api.Model.Job> GetActive()
     {
-      StringBuilder uriBuilder;
-      if (string.IsNullOrEmpty(jobName))
+      return Get(string.Empty, ActiveJobsFilter);
+    }
+
+    public virtual JobList GetPage(string jobName, int limit, int offset, string statusFilter = "")
+    {
+      var url = string.Format(GetJobUrl, projectId, limit, offset);
+      if (!string.IsNullOrEmpty(jobName))
       {
-        uriBuilder = this.GetRequestStringBuilder(string.Format(GetJobUrl, projectId, limit, offset));
-      }
-      else
-      {
-        uriBuilder = this.GetRequestStringBuilder(string.Format(GetJobByNameUrl, projectId, jobName, limit, offset));
+        url += "&jobName=" + jobName;
       }
 
+      if (!string.IsNullOrEmpty(statusFilter))
+      {
+        url += "&translationJobStatus=" + statusFilter;
+      }
+
+      var uriBuilder = this.GetRequestStringBuilder(url);
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
       return JsonConvert.DeserializeObject<JobList>(response["response"]["data"].ToString());
