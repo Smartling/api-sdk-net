@@ -94,12 +94,7 @@ namespace Smartling.Api.Job
 
       return results;
     }
-
-    public virtual List<Smartling.Api.Model.Job> GetActive()
-    {
-      return Get(string.Empty, ActiveJobsFilter);
-    }
-
+    
     public virtual JobList GetPage(string jobName, int limit, int offset, string statusFilter = "")
     {
       var url = string.Format(GetJobUrl, projectId, limit, offset);
