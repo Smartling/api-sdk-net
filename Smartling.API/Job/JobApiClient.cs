@@ -99,7 +99,7 @@ namespace Smartling.Api.Job
       var url = string.Format(GetJobUrl, projectId, limit, offset);
       if (!string.IsNullOrEmpty(jobName))
       {
-        url += "&jobName=" + jobName;
+        url += $"&jobName={System.Net.WebUtility.UrlEncode(jobName)}";
       }
 
       if (!string.IsNullOrEmpty(statusFilter))
