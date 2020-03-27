@@ -90,7 +90,7 @@ namespace Smartling.Api
               throw new AuthenticationException(error.response.code + ": " + messages, e);
             }
 
-            if (messages.Contains(ThrottlingErrorCode))
+            if (error.response.code == ThrottlingErrorCode)
             {
               throw new ThrottlingException(error.response.code + ": " + messages, e);
             }
@@ -100,7 +100,7 @@ namespace Smartling.Api
               throw new MaintenanceModeException(error.response.code + ": " + messages, e);
             }
 
-            throw new Exception(error.response.code + ": " + messages, e);
+            throw new SmartlingApiException(error.response.code + ": " + messages, e);
           }
         }
       }
