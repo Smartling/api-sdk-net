@@ -16,7 +16,6 @@ namespace Smartling.Api.Job
     private readonly string JobAuthorizeUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/authorize";
     private readonly string AddLocaleUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/locales/{2}?syncContent={3}";
     private readonly string GetProcessesUrl = "/jobs-api/v3/projects/{0}/jobs/processes";
-    private readonly string ActiveJobsFilter = "IN_PROGRESS&translationJobStatus=COMPLETED&translationJobStatus=AWAITING_AUTHORIZATION";
 
     private readonly string projectId;
     private readonly IAuthenticationStrategy auth;
