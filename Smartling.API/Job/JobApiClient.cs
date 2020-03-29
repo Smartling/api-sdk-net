@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Smartling.Api.Authentication;
@@ -77,9 +78,9 @@ namespace Smartling.Api.Job
       return JsonConvert.DeserializeObject<AddFileToJobResponse>(response["response"]["data"].ToString());
     }
 
-    public virtual List<Smartling.Api.Model.Job> Get(string jobName = "", string statusFilter = "")
+    public virtual List<Smartling.Api.Model.Job> Get(string jobName = "", IEnumerable<string> allowedStatuses = null)
     {
-      var page = GetPage(jobName, PageSize, 0, statusFilter);
+      var page = GetPage(jobName, PageSize, 0, allowedStatuses);
       var results = new List<Smartling.Api.Model.Job>();
       var pageNumber = 0;
       results.AddRange(page.items);
@@ -87,14 +88,14 @@ namespace Smartling.Api.Job
       while (page.totalCount > results.Count && page.items.Count > 0)
       {
         pageNumber++;
-        page = GetPage(jobName, PageSize, PageSize * pageNumber, statusFilter);
+        page = GetPage(jobName, PageSize, PageSize * pageNumber, allowedStatuses);
         results.AddRange(page.items);
       }
 
       return results;
     }
     
-    public virtual JobList GetPage(string jobName, int limit, int offset, string statusFilter = "")
+    public virtual JobList GetPage(string jobName, int limit, int offset, IEnumerable<string> allowedStatuses = null)
     {
       var url = string.Format(GetJobUrl, projectId, limit, offset);
       if (!string.IsNullOrEmpty(jobName))
@@ -102,9 +103,9 @@ namespace Smartling.Api.Job
         url += $"&jobName={System.Net.WebUtility.UrlEncode(jobName)}";
       }
 
-      if (!string.IsNullOrEmpty(statusFilter))
+      if (allowedStatuses != null)
       {
-        url += "&translationJobStatus=" + statusFilter;
+        url = allowedStatuses.Aggregate(url, (current, allowedStatus) => current + $"&translationJobStatus={System.Net.WebUtility.UrlEncode(allowedStatus)}");
       }
 
       var uriBuilder = this.GetRequestStringBuilder(url);
