@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Smartling.Api.Authentication;
@@ -11,7 +12,6 @@ namespace Smartling.Api.Job
     private readonly string CreateJobUrl = "/jobs-api/v3/projects/{0}/jobs";
     private readonly string GetJobUrl = "/jobs-api/v3/projects/{0}/jobs?limit={1}&offset={2}";
     private readonly string GetJobByIdUrl = "/jobs-api/v3/projects/{0}/jobs/{1}";
-    private readonly string GetJobByNameUrl = "/jobs-api/v3/projects/{0}/jobs?jobName={1}&limit={2}&offset={3}";
     private readonly string UpdateJobUrl = "/jobs-api/v3/projects/{0}/jobs/{1}";
     private readonly string JobFileUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/file/add";
     private readonly string JobAuthorizeUrl = "/jobs-api/v3/projects/{0}/jobs/{1}/authorize";
@@ -78,9 +78,9 @@ namespace Smartling.Api.Job
       return JsonConvert.DeserializeObject<AddFileToJobResponse>(response["response"]["data"].ToString());
     }
 
-    public virtual List<Smartling.Api.Model.Job> Get(string jobName = "")
+    public virtual List<Smartling.Api.Model.Job> Get(string jobName = "", IEnumerable<string> allowedStatuses = null)
     {
-      var page = GetPage(jobName, PageSize, 0);
+      var page = GetPage(jobName, PageSize, 0, allowedStatuses);
       var results = new List<Smartling.Api.Model.Job>();
       var pageNumber = 0;
       results.AddRange(page.items);
@@ -88,23 +88,28 @@ namespace Smartling.Api.Job
       while (page.totalCount > results.Count && page.items.Count > 0)
       {
         pageNumber++;
-        page = GetPage(jobName, PageSize, PageSize * pageNumber);
+        page = GetPage(jobName, PageSize, PageSize * pageNumber, allowedStatuses);
         results.AddRange(page.items);
       }
 
       return results;
     }
-
-    public virtual JobList GetPage(string jobName, int limit, int offset)
+    
+    public virtual JobList GetPage(string jobName, int limit, int offset, IEnumerable<string> allowedStatuses = null)
     {
-      StringBuilder uriBuilder;
-      if (string.IsNullOrEmpty(jobName))
+      var url = string.Format(GetJobUrl, projectId, limit, offset);
+      var uriBuilder = this.GetRequestStringBuilder(url);
+      if (!string.IsNullOrEmpty(jobName))
       {
-        uriBuilder = this.GetRequestStringBuilder(string.Format(GetJobUrl, projectId, limit, offset));
+        uriBuilder.Append($"&jobName={System.Net.WebUtility.UrlEncode(jobName)}");
       }
-      else
+
+      if (allowedStatuses != null)
       {
-        uriBuilder = this.GetRequestStringBuilder(string.Format(GetJobByNameUrl, projectId, jobName, limit, offset));
+        foreach (var allowedStatus in allowedStatuses)
+        {
+          uriBuilder.Append($"&translationJobStatus={System.Net.WebUtility.UrlEncode(allowedStatus)}");
+        }
       }
 
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
