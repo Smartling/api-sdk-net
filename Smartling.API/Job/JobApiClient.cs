@@ -98,17 +98,20 @@ namespace Smartling.Api.Job
     public virtual JobList GetPage(string jobName, int limit, int offset, IEnumerable<string> allowedStatuses = null)
     {
       var url = string.Format(GetJobUrl, projectId, limit, offset);
+      var uriBuilder = this.GetRequestStringBuilder(url);
       if (!string.IsNullOrEmpty(jobName))
       {
-        url += $"&jobName={System.Net.WebUtility.UrlEncode(jobName)}";
+        uriBuilder.Append($"&jobName={System.Net.WebUtility.UrlEncode(jobName)}");
       }
 
       if (allowedStatuses != null)
       {
-        url = allowedStatuses.Aggregate(url, (current, allowedStatus) => current + $"&translationJobStatus={System.Net.WebUtility.UrlEncode(allowedStatus)}");
+        foreach (var allowedStatus in allowedStatuses)
+        {
+          uriBuilder.Append($"&translationJobStatus={System.Net.WebUtility.UrlEncode(allowedStatus)}");
+        }
       }
 
-      var uriBuilder = this.GetRequestStringBuilder(url);
       var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
       var response = ExecuteGetRequest(request, uriBuilder, auth);
       return JsonConvert.DeserializeObject<JobList>(response["response"]["data"].ToString());

@@ -174,7 +174,7 @@ namespace Smartling.ApiSample
     {
       var jobApiClient = new JobApiClient(auth, projectId);
 
-      foreach(var job in jobApiClient.Get("ApiSample"))
+      foreach(var job in jobApiClient.Get("ApiSample", new List<string>() { "AWAITING_AUTHORIZATION", "IN_PROGRESS", "IN_PROGRESS" }))
       {
         Console.WriteLine(job.jobName);
       }
