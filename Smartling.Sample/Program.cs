@@ -8,6 +8,7 @@ using Smartling.Api.Job;
 using Smartling.Api.Model;
 using Smartling.Api.Project;
 using System.Threading;
+using Smartling.Api.CloudLog;
 
 namespace Smartling.ApiSample
 {
@@ -40,9 +41,27 @@ namespace Smartling.ApiSample
       LastModified(fileApiClient, fileUri);
       Authorization(fileApiClient);
       Deletion(fileApiClient, fileUri);
+      CloudLog();
 
       Console.WriteLine("All done, press any key to exit");
       Console.ReadKey();
+    }
+
+    private static void CloudLog()
+    {
+      var logger = new SmartlingCloudLogger();
+
+      logger.Append(new LoggingEventData {
+        Channel = "ApiSample",
+        RemoteChannel = "Smartling.ApiSample.Program",
+        ProjectId = "aabbccdd",
+        Level = "Info",
+        TimeStamp = DateTime.Now,
+        ThreadName = "Test thread name",
+        Message = "Test message"
+      });
+      // Logger send async
+      Thread.Sleep(4 * 1000);
     }
 
     private static void Audit(OAuthAuthenticationStrategy auth)
