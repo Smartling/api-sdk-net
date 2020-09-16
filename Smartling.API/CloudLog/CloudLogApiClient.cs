@@ -14,7 +14,7 @@ namespace Smartling.Api.CloudLog
     private const string JsonContentType = "application/json";
     private readonly string hostName = Environment.MachineName;
 
-    public void SendToCloud(IProducerConsumerCollection<LoggingEventData> events)
+    public virtual void SendToCloud(IProducerConsumerCollection<LoggingEventData> events)
     {
       if (events == null)
       {

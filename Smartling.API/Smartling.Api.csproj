@@ -6,7 +6,8 @@
     <Product>Smartling.API</Product>
     <Version>2.4.37.0</Version>
     <Authors>Smartling</Authors>
-    <Copyright>Copyright © Smartling 2019</Copyright>
+    <Copyright>Copyright © Smartling 2020</Copyright>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <ItemGroup>

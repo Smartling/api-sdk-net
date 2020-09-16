@@ -11,7 +11,7 @@ namespace Smartling.Api.CloudLog
   {
     private const int BufferMaxSize = 100;
     private const int TimeoutSeconds = 3;
-    private enum FlushMode { ForceFlush, DefaultFlush }
+    public enum FlushMode { ForceFlush, DefaultFlush }
     private Timer idleFlushTimer;
     private const int DefaultLogThreads = 5;
 
@@ -21,17 +21,24 @@ namespace Smartling.Api.CloudLog
     private static readonly LimitedConcurrencyLevelTaskScheduler scheduler = new LimitedConcurrencyLevelTaskScheduler(DefaultLogThreads);
     private static readonly TaskFactory taskFactory = new TaskFactory(scheduler);
 
-    private readonly CloudLogApiClient logClient = new CloudLogApiClient();
+    private readonly CloudLogApiClient logApiClient;
 
-    public SmartlingCloudLogger()
+    public SmartlingCloudLogger() : this(new CloudLogApiClient())
     {
+    }
+
+    public SmartlingCloudLogger(CloudLogApiClient logApiClient)
+    {
+      this.logApiClient = logApiClient;
       var idleTimeThreshold = TimeSpan.FromSeconds(TimeoutSeconds);
       idleFlushTimer = new Timer(this.TimedFlush, null, idleTimeThreshold, idleTimeThreshold);
     }
 
-    public void Append(LoggingEventData loggingEvent)
+    public void Append(LoggingEventData loggingEventData)
     {
-      loggingEvents.Enqueue(loggingEvent);
+      if (string.IsNullOrEmpty(loggingEventData.Level)) return;
+
+      loggingEvents.Enqueue(loggingEventData);
       Flush(FlushMode.DefaultFlush);
     }
 
@@ -40,7 +47,7 @@ namespace Smartling.Api.CloudLog
       this.Flush(FlushMode.ForceFlush);
     }
 
-    private void Flush(FlushMode flushMode)
+    protected internal virtual void Flush(FlushMode flushMode)
     {
       var logEventsCount = loggingEvents.Count;
       if (logEventsCount <= 0)
@@ -59,7 +66,7 @@ namespace Smartling.Api.CloudLog
 
     protected internal virtual void SendToCloudAsync(IProducerConsumerCollection<LoggingEventData> events)
     {
-      taskFactory.StartNew(() => logClient.SendToCloud(events));
+      taskFactory.StartNew(() => logApiClient.SendToCloud(events));
     }
 
     public void Dispose()
