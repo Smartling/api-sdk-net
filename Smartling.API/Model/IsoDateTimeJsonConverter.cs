@@ -1,30 +1,12 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using Newtonsoft.Json.Converters;
 
 namespace Smartling.Api.Model
 {
-  public class IsoDateTimeJsonConverter : JsonConverter
+  public class IsoDateTimeJsonConverter : IsoDateTimeConverter
   {
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    public IsoDateTimeJsonConverter()
     {
-      var date = (DateTime)value;
-      var isoDate = date.ToString("yyyy-MM-ddTHH:mm:ssZ");
-      writer.WriteValue(isoDate);
-    }
-
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-    {
-      throw new NotImplementedException("Unnecessary because CanRead is false. The type will skip the converter.");
-    }
-
-    public override bool CanRead
-    {
-      get { return false; }
-    }
-
-    public override bool CanConvert(Type objectType)
-    {
-      return objectType == typeof(DateTime) || objectType == typeof(DateTime?);
+      DateTimeFormat = "yyyy-MM-ddTHH:mm:ssZ";
     }
   }
 }
