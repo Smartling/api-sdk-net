@@ -57,7 +57,7 @@ namespace Smartling.ApiSample
         RemoteChannel = "Smartling.ApiSample.Program",
         ProjectId = "aabbccdd",
         Level = "Info",
-        TimeStamp = DateTime.Now,
+        TimeStampUtc = DateTime.UtcNow,
         ThreadName = "Test thread name",
         Message = "Test message"
       });

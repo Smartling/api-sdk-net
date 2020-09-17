@@ -36,14 +36,14 @@ namespace Smartling.Api.Model
     public string ThreadName;
 
     /// <summary>
-    /// The time the event was logged
+    /// Gets or sets the UTC time the event was logged
     /// </summary>
     /// <remarks>
     /// <para>
-    /// The TimeStamp is stored in the local time zone for this computer.
+    /// The TimeStamp is stored in the UTC time zone.
     /// </para>
     /// </remarks>
-    public DateTime TimeStamp;
+    public DateTime TimeStampUtc;
 
     /// <summary>
     /// The application supplied message.

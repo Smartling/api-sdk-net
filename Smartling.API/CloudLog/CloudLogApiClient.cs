@@ -40,7 +40,7 @@ namespace Smartling.Api.CloudLog
               remoteChannel = loggingEventData.RemoteChannel,
               moduleVersion = loggingEventData.ModuleVersion
             },
-            datetime = DateTime.UtcNow.ToString("o"),
+            datetime = loggingEventData.TimeStampUtc,
             level_name = loggingEventData.Level,
             message = string.Format("{0}{1} {2}", threadName,
               loggingEventData.Message, loggingEventData.ExceptionString)
@@ -90,7 +90,8 @@ namespace Smartling.Api.CloudLog
   {
     public string level_name;
     public string channel;
-    public string datetime;
+    [JsonConverter(typeof(Newtonsoft.Json.Converters.IsoDateTimeConverter))]
+    public DateTime datetime;
     public LogContext context;
     public string message;
   }
