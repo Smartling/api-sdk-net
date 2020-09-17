@@ -23,10 +23,7 @@ namespace Smartling.Api.CloudLog
 
     private readonly CloudLogApiClient logApiClient;
 
-    public SmartlingCloudLogger() : this(new CloudLogApiClient())
-    {
-    }
-
+    // TODO : Add buffer size and timeout here
     public SmartlingCloudLogger(CloudLogApiClient logApiClient)
     {
       this.logApiClient = logApiClient;

@@ -49,7 +49,8 @@ namespace Smartling.ApiSample
 
     private static void CloudLog()
     {
-      var logger = new SmartlingCloudLogger();
+      var apiClient = new CloudLogApiClient { ApiClientUid = new ClientUid { client = "ApiSample", version = "1.0" } };
+      var logger = new SmartlingCloudLogger(apiClient);
 
       logger.Append(new LoggingEventData {
         Channel = "ApiSample",
