@@ -64,5 +64,11 @@ namespace Smartling.Api.Model
     /// </para>
     /// </remarks>
     public string ExceptionString;
+
+    /// <summary>
+    /// Integration version. It will be present in every log record
+    /// so keep it short
+    /// </summary>
+    public string ModuleVersion;
   }
 }

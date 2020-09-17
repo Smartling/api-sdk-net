@@ -30,7 +30,7 @@ namespace Smartling.Api.CloudLog
 
         while (events.TryTake(out var loggingEventData))
         {
-          var threadName = string.IsNullOrEmpty(loggingEventData.ThreadName) ? string.Empty : "[" + loggingEventData.ThreadName + "]";
+          var threadName = string.IsNullOrEmpty(loggingEventData.ThreadName) ? string.Empty : "[" + loggingEventData.ThreadName + "] ";
           command.records.Add(new LogRecord
           {
             channel = loggingEventData.Channel,
@@ -38,11 +38,11 @@ namespace Smartling.Api.CloudLog
               host = hostName,
               projectId = loggingEventData.ProjectId,
               remoteChannel = loggingEventData.RemoteChannel,
-              moduleVersion = ApiClientUid.ToUserAgent()
+              moduleVersion = loggingEventData.ModuleVersion
             },
             datetime = DateTime.UtcNow.ToString("o"),
             level_name = loggingEventData.Level,
-            message = string.Format("{0} {1} {2}", threadName,
+            message = string.Format("{0}{1} {2}", threadName,
               loggingEventData.Message, loggingEventData.ExceptionString)
           });
         }
@@ -97,9 +97,12 @@ namespace Smartling.Api.CloudLog
 
   internal struct LogContext
   {
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string projectId;
     public string host;
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string remoteChannel;
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public string moduleVersion;
   }
 }
