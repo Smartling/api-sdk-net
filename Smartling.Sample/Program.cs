@@ -96,6 +96,18 @@ namespace Smartling.ApiSample
       {
         Console.WriteLine(item.fileUri + " " + item.localeId + " " + item.publishDate);
       }
+
+      var search = new RecentlyPublishedSearch(DateTime.Now.AddDays(-5));
+      search.FileUris = new List<string> { "/content/Home/6A2CD795_en.xml" };
+      search.LocaleIds = new List<string> { "ru-RU" };
+      search.Limit = 10;
+      search.Offset = 0;
+
+      var searchResults = publishedClient.GetRecentlyPublished(search);
+      foreach (var item in searchResults.items)
+      {
+        Console.WriteLine(item.fileUri + " " + item.localeId + " " + item.publishDate);
+      }
     }
 
     private static void Submissions(OAuthAuthenticationStrategy auth)
