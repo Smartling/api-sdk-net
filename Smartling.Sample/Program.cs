@@ -91,12 +91,6 @@ namespace Smartling.ApiSample
     private static void Published(OAuthAuthenticationStrategy auth)
     {
       var publishedClient = new PublishedFilesApiClient(auth, projectId);
-
-      foreach (var item in publishedClient.GetRecentlyPublished())
-      {
-        Console.WriteLine(item.fileUri + " " + item.localeId + " " + item.publishDate);
-      }
-
       var search = new RecentlyPublishedSearch(DateTime.Now.AddDays(-5));
       search.FileUris = new List<string> { "/content/Home/6A2CD795_en.xml" };
       search.LocaleIds = new List<string> { "ru-RU" };

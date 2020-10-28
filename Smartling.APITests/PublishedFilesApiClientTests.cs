@@ -69,6 +69,27 @@ namespace Smartling.ApiTests
       Assert.AreEqual(1, result.items.Count);
     }
 
+
+    [TestMethod]
+    public void PublishedFiles_Should_Encode_Parameters()
+    {
+      // Arrange
+      var auth = GetAuth();
+      var client = new Mock<PublishedFilesApiClient>(auth, "test");
+      client.CallBase = true;
+      WebRequest saveObject = null;
+      client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Callback<WebRequest>((obj) => saveObject = obj).Returns(PublishedFilesApiResponse);
+
+      var search = new RecentlyPublishedSearch(DateTime.Now.AddDays(-5));
+      search.FileUris = new List<string> { "/content/Home/John & Doe_en.xml" };
+
+      // Act
+      var result = client.Object.GetRecentlyPublished(search);
+
+      // Assert
+      Assert.IsTrue(saveObject.RequestUri.ToString().EndsWith("&fileUris[]=%2Fcontent%2FHome%2FJohn+%26+Doe_en.xml"));
+    }
+
     [TestMethod]
     public void PublishedFiles_Should_Validate_Limit()
     {

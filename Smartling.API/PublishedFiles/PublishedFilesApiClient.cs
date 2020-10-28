@@ -25,26 +25,6 @@ namespace Smartling.Api.Project
       this.projectId = projectId;
     }
 
-    public virtual List<PublishedItem> GetRecentlyPublished()
-    {
-      var uriBuilder = this.GetRequestStringBuilder(string.Format(RecentlyPublishedUrl, projectId, DateTime.UtcNow.AddDays(-DefaultPeriod).ToString("s", System.Globalization.CultureInfo.InvariantCulture)));
-      var request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken());
-      JObject response;
-
-      try
-      {
-        response = JObject.Parse(GetResponse(request));
-      }
-      catch (AuthenticationException)
-      {
-        request = PrepareGetRequest(uriBuilder.ToString(), auth.GetToken(true));
-        response = JObject.Parse(GetResponse(request));
-      }
-
-      var result = JsonConvert.DeserializeObject<RecentlyPublished>(response["response"]["data"].ToString());
-      return result.items ?? new List<PublishedItem>();
-    }
-
     public virtual RecentlyPublished GetRecentlyPublished(RecentlyPublishedSearch recentlyPublishedSearch)
     {
       if (!recentlyPublishedSearch.IsValid())
@@ -57,7 +37,7 @@ namespace Smartling.Api.Project
       {
         foreach (var fileUri in recentlyPublishedSearch.FileUris)
         {
-          uriBuilder.AppendFormat("&{0}={1}", FileUrisParameterName, fileUri);
+          uriBuilder.AppendFormat("&{0}={1}", FileUrisParameterName, System.Net.WebUtility.UrlEncode(fileUri));
         }
       }
 
