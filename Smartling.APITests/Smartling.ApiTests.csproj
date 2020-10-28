@@ -58,6 +58,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="PublishedFilesApiClientTests.cs" />
     <Compile Include="AuthApiClientTests.cs" />
     <Compile Include="ProjectApiClientTests.cs" />
     <Compile Include="FileApiClientTests.cs" />

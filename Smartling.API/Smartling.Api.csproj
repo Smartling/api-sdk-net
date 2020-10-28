@@ -4,12 +4,12 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <PackageId>Smartling.API</PackageId>
     <Product>Smartling.API</Product>
-    <Version>2.4.40.0</Version>
+    <Version>2.4.41.0</Version>
     <Authors>Smartling</Authors>
     <Copyright>Copyright © Smartling 2020</Copyright>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <AssemblyVersion>2.4.40.0</AssemblyVersion>
-    <FileVersion>2.4.40.0</FileVersion>
+    <AssemblyVersion>2.4.41.0</AssemblyVersion>
+    <FileVersion>2.4.41.0</FileVersion>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>

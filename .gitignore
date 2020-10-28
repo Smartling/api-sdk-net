@@ -177,3 +177,5 @@ FakesAssemblies/
 .vs/Smartling.Api/v15/Server/sqlite3/storage.ide
 *.ide-wal
 *.dtbcache
+.vs/Smartling.Api/v16/TestStore/0/testlog.manifest
+*.testlog
