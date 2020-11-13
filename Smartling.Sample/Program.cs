@@ -238,7 +238,7 @@ namespace Smartling.ApiSample
 
       string filePath = "ApiSample_" + Guid.NewGuid();
       string fileUri = "/master/" + filePath;
-      batchApiClient.UploadFile(@"C:\Sample.xml", fileUri, "xml", "ru-RU", true, batch.batchUid, filePath);
+      batchApiClient.UploadFile(new BatchUpload.Builder().CreateUpload(@"C:\Sample.xml", fileUri, "xml", new List<string> { "ru-RU" }, batch.batchUid).WithNameSpace(filePath));
       batchApiClient.Execute(batch.batchUid);
 
       var batchResult = batchApiClient.Get(batch.batchUid);
