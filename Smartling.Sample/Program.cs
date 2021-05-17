@@ -9,6 +9,7 @@ using Smartling.Api.Model;
 using Smartling.Api.Project;
 using System.Threading;
 using Smartling.Api.CloudLog;
+using Smartling.Api.PublishedFiles;
 
 namespace Smartling.ApiSample
 {
@@ -92,8 +93,8 @@ namespace Smartling.ApiSample
     {
       var publishedClient = new PublishedFilesApiClient(auth, projectId);
       var search = new RecentlyPublishedSearch(DateTime.Now.AddDays(-5));
-      search.FileUris = new List<string> { "/content/Home/6A2CD795_en.xml" };
-      search.LocaleIds = new List<string> { "ru-RU" };
+      search.FileUris.Add("/content/Home/6A2CD795_en.xml" );
+      search.LocaleIds.Add("ru-RU");
       search.Limit = 10;
       search.Offset = 0;
 

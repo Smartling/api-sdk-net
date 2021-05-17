@@ -6,6 +6,7 @@ using Moq;
 using Smartling.Api.Authentication;
 using Smartling.Api.Model;
 using Smartling.Api.Project;
+using Smartling.Api.PublishedFiles;
 
 namespace Smartling.ApiTests
 {
@@ -57,8 +58,8 @@ namespace Smartling.ApiTests
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(PublishedFilesApiResponse);
 
       var search = new RecentlyPublishedSearch(DateTime.Now.AddDays(-5));
-      search.FileUris = new List<string> { "/content/Home/6A2CD795_en.xml" };
-      search.LocaleIds = new List<string> { "ru-RU" };
+      search.FileUris.Add("/content/Home/6A2CD795_en.xml");
+      search.LocaleIds.Add("ru-RU");
       search.Limit = 10;
       search.Offset = 0;
 
@@ -81,7 +82,7 @@ namespace Smartling.ApiTests
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Callback<WebRequest>((obj) => saveObject = obj).Returns(PublishedFilesApiResponse);
 
       var search = new RecentlyPublishedSearch(DateTime.Now.AddDays(-5));
-      search.FileUris = new List<string> { "/content/Home/John & Doe_en.xml" };
+      search.FileUris.Add("/content/Home/John & Doe_en.xml");
 
       // Act
       var result = client.Object.GetRecentlyPublished(search);
@@ -100,8 +101,8 @@ namespace Smartling.ApiTests
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(PublishedFilesApiResponse);
 
       var search = new RecentlyPublishedSearch(DateTime.Now.AddDays(-5));
-      search.FileUris = new List<string> { "/content/Home/6A2CD795_en.xml" };
-      search.LocaleIds = new List<string> { "ru-RU" };
+      search.FileUris.Add("/content/Home/6A2CD795_en.xml");
+      search.LocaleIds.Add("ru-RU");
       search.Limit = -10;
       search.Offset = 0;
 
@@ -132,8 +133,8 @@ namespace Smartling.ApiTests
       client.Setup(foo => foo.GetResponse(It.IsAny<WebRequest>())).Returns(PublishedFilesApiResponse);
 
       var search = new RecentlyPublishedSearch(DateTime.Now.AddDays(-5));
-      search.FileUris = new List<string> { "/content/Home/6A2CD795_en.xml" };
-      search.LocaleIds = new List<string> { "ru-RU" };
+      search.FileUris.Add("/content/Home/6A2CD795_en.xml");
+      search.LocaleIds.Add("ru-RU");
       search.Limit = 0;
       search.Offset = 10;
 
