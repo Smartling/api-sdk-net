@@ -11,8 +11,8 @@ namespace Smartling.Api.Model
     }
 
     public DateTime PublishedAfter { get; set; }
-    public List<string> FileUris { get; set; }
-    public List<string> LocaleIds { get; set; }
+    public List<string> FileUris { get; } = new List<string>();
+    public List<string> LocaleIds { get; } = new List<string>();
     public int Limit { get; set; }
     public int Offset { get; set; }
     public string LastError { get; set; }
@@ -25,13 +25,13 @@ namespace Smartling.Api.Model
         return false;
       }
 
-      if (FileUris?.Count > 20)
+      if (FileUris.Count > 20)
       {
         LastError = "FileUris max amount is 20 files";
         return false;
       }
 
-      if (LocaleIds?.Count > 50)
+      if (LocaleIds.Count > 50)
       {
         LastError = "LocaleIds max amount is 50 locales";
         return false;

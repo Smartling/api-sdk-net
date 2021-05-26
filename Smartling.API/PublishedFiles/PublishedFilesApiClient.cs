@@ -1,12 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Smartling.Api.Authentication;
 using Smartling.Api.Exceptions;
 using Smartling.Api.Model;
-using System;
-using System.Collections.Generic;
 
-namespace Smartling.Api.Project
+namespace Smartling.Api.PublishedFiles
 {
   public class PublishedFilesApiClient : ApiClientBase
   {
@@ -16,7 +15,6 @@ namespace Smartling.Api.Project
     private readonly string LimitParameterName = "limit";
     private readonly string OffsetParameterName = "offset";
     private readonly string projectId;
-    private const int DefaultPeriod = 5;
     private readonly IAuthenticationStrategy auth;
 
     public PublishedFilesApiClient(IAuthenticationStrategy auth, string projectId)
@@ -33,28 +31,22 @@ namespace Smartling.Api.Project
       }
 
       var uriBuilder = this.GetRequestStringBuilder(string.Format(RecentlyPublishedUrl, projectId, recentlyPublishedSearch.PublishedAfter.ToString("s", System.Globalization.CultureInfo.InvariantCulture)));
-      if(recentlyPublishedSearch.FileUris?.Count > 0)
+      foreach (var fileUri in recentlyPublishedSearch.FileUris)
       {
-        foreach (var fileUri in recentlyPublishedSearch.FileUris)
-        {
-          uriBuilder.AppendFormat("&{0}={1}", FileUrisParameterName, System.Net.WebUtility.UrlEncode(fileUri));
-        }
+        uriBuilder.AppendFormat("&{0}={1}", FileUrisParameterName, System.Net.WebUtility.UrlEncode(fileUri));
       }
 
-      if (recentlyPublishedSearch.LocaleIds?.Count > 0)
+      foreach (var localeId in recentlyPublishedSearch.LocaleIds)
       {
-        foreach (var localeId in recentlyPublishedSearch.LocaleIds)
-        {
-          uriBuilder.AppendFormat("&{0}={1}", LocaleIdsParameterName, localeId);
-        }
+        uriBuilder.AppendFormat("&{0}={1}", LocaleIdsParameterName, localeId);
       }
 
-      if(recentlyPublishedSearch.Limit > 0)
+      if (recentlyPublishedSearch.Limit > 0)
       {
         uriBuilder.AppendFormat("&{0}={1}", LimitParameterName, recentlyPublishedSearch.Limit);
       }
 
-      if(recentlyPublishedSearch.Offset > 0)
+      if (recentlyPublishedSearch.Offset > 0)
       {
         uriBuilder.AppendFormat("&{0}={1}", OffsetParameterName, recentlyPublishedSearch.Offset);
       }
